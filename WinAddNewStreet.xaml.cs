@@ -36,7 +36,6 @@ namespace Flats
             {
                FillTextBoxes(selected_index);
             }
-            Test();
         }
         private void Add_Click(object sender, RoutedEventArgs e)
         {
@@ -102,17 +101,7 @@ namespace Flats
             ds_edit.Tables[0].Rows[selected_index][0] = row_id;
             ds_edit.Tables[0].Rows[selected_index][1] = streetname_box.Text;           
         }
-        private void Test()
-        {
-            foreach(Control tb in wp.Children)
-            {
-                if ( tb is TextBox)
-                {
-                    TextBox tbb = (TextBox)tb;
-                    tbb.Text = "PIDORASI";
-                }
-            }
-        }
+        
     }
    
 }

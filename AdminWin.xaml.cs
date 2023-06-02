@@ -466,7 +466,7 @@ namespace Flats
         }
         protected override void OnClosed(EventArgs e)
         {
-            this.Owner.Show();
+            Owner.Show();
             base.OnClosed(e);
         }
 

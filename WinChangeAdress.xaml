@@ -1,0 +1,16 @@
+﻿<Window x:Class="Flats.WinChangeAdress"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flats"
+        mc:Ignorable="d"
+        Title="WinChangeAdress" Height="200" Width="206">
+    <Grid>
+        <Label Content="Улица" HorizontalAlignment="Left" Margin="33,15,0,0" VerticalAlignment="Top" Target="{Binding ElementName=street_box}"/>
+        <TextBox HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="90" Name="street_box"/>
+        <Label Content="Дом" HorizontalAlignment="Left" Margin="138,15,0,0" VerticalAlignment="Top" Target="{Binding ElementName=house_box}"/>
+        <TextBox HorizontalAlignment="Left" Margin="130,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Name="house_box"/>
+        <Button Content="Сохранить изменения" HorizontalAlignment="Center" Margin="0,120,0,0" VerticalAlignment="Top" Name="SaveChanges" Click="SaveChanges_Click"/>
+    </Grid>
+</Window>

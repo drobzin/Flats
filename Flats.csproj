@@ -62,6 +62,9 @@
     <Compile Include="AdminWin.xaml.cs">
       <DependentUpon>AdminWin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ClientWin.xaml.cs">
+      <DependentUpon>ClientWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LogInWin.xaml.cs">
       <DependentUpon>LogInWin.xaml</DependentUpon>
     </Compile>
@@ -86,7 +89,14 @@
     <Compile Include="WinAddNewTreetyRow.xaml.cs">
       <DependentUpon>WinAddNewTreetyRow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WinChangeAdress.xaml.cs">
+      <DependentUpon>WinChangeAdress.xaml</DependentUpon>
+    </Compile>
     <Page Include="AdminWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WinAddNewTreetyRow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WinChangeAdress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

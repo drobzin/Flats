@@ -35,7 +35,10 @@ namespace Flats
                     object userAnswer = FindUser(userSelection);
                     if (userAnswer != null) //Тут должно производится открытие клиентского окна и передача его айдишника туда
                     {
-                        MessageBox.Show(userAnswer.ToString());
+                        ClientWin clientWin = new ClientWin(Convert.ToInt32(userAnswer));
+                        clientWin.Owner = this;
+                        clientWin.Show();
+                        this.Hide();
                     }
                     else MessageBox.Show("fuuuuuuuuu"); // Тут по хорошему предложение зарегестрироваться или же просто вывод сообщения об ошибке
                     break;
@@ -78,7 +81,11 @@ namespace Flats
         }
         protected override void OnClosed(EventArgs e)
         {
-            this.Owner.Show();
+            try
+            {
+                Owner.Show();
+            }
+            catch(Exception) { }
             base.OnClosed(e);
         }
     }
