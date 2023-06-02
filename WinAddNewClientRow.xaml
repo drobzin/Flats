@@ -1,0 +1,22 @@
+﻿<Window x:Class="Flats.WinAddNewClientRow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flats"
+        mc:Ignorable="d"
+        Title="WinNewCity" Height="350" Width="300">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="StreetID" VerticalAlignment="Top" Name="streetid"/>
+        <TextBox HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sreetid_box" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,80,0,0" TextWrapping="Wrap" Text="House" VerticalAlignment="Top" Name="house" />
+        <TextBox HorizontalAlignment="Left" Margin="20,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,140,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Name="name"/>
+        <TextBox HorizontalAlignment="Left" Margin="20,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="name_box" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,200,0,0" TextWrapping="Wrap" Text="Document" VerticalAlignment="Top" Name="document" />
+        <TextBox HorizontalAlignment="Left" Margin="20,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="document_box" />
+       
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,260,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
+
+    </Grid>
+</Window>

@@ -1,0 +1,32 @@
+﻿<Window x:Class="Flats.WinAddNewTreetyRow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flats"
+        mc:Ignorable="d"
+        Title="WinAddNewTreetyRow" Height="500" Width="300">
+    <Grid>
+        <StackPanel Name="sp">
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="agent_name_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="date_start_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="date_stop_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="prolong_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="bonus_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="comment_box" />
+            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regid_box" />
+        </StackPanel>
+
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,440,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
+
+    
+        
+    </Grid>
+</Window>
