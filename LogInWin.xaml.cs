@@ -64,6 +64,9 @@ namespace Flats
                     }
                     else MessageBox.Show("fuuuuuuuuu"); // Вывод сообщения о недостпуности
                     break;
+                default:
+                    MessageBox.Show("Выберите аккаунт");
+                    break;
             }
         }
 

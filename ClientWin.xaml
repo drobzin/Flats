@@ -1,19 +1,30 @@
-﻿<Window x:Class="Flats.ClientWin"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Flats"
+        xmlns:Globalization="clr-namespace:System.Globalization;assembly=mscorlib" x:Class="Flats.ClientWin"
         mc:Ignorable="d"
-        Title="ClientWin" Height="450" Width="845">
+        Title="ClientWin" Height="450" Width="870">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="95,20,0,0" TextWrapping="Wrap" Text="Имя:" VerticalAlignment="Top" Name="name"/>
-        <TextBlock HorizontalAlignment="Left" Margin="95,50,0,0" TextWrapping="Wrap" Text="Адрес:" VerticalAlignment="Top" Name="adress"/>
-        <TextBlock HorizontalAlignment="Left" Margin="95,80,0,0" TextWrapping="Wrap" Text="Телефон:" VerticalAlignment="Top" Name="phone"/>
-        <DataGrid  ItemsSource="{Binding}" Margin="18,168,18,90" Name="apt"/>
-        <Button Content="Изменить" HorizontalAlignment="Left" Margin="17,50,0,0" VerticalAlignment="Top" Name ="changeAdress" Click="ChangeAdress_Click"/>
-        <Button Content="Изменить" HorizontalAlignment="Left" Margin="17,80,0,0" VerticalAlignment="Top" Name ="changePhone" Click="ChangePhone_Click"/>
-        <Button Content="Выйти" HorizontalAlignment="Center" Margin="0,365,0,0" VerticalAlignment="Top" Name="Exit" Click="Exit_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="95,20,0,0" TextWrapping="Wrap" Text="Имя:" VerticalAlignment="Top" x:Name="name"/>
+        <TextBlock HorizontalAlignment="Left" Margin="95,50,0,0" TextWrapping="Wrap" Text="Адрес:" VerticalAlignment="Top" x:Name="adress"/>
+        <TextBlock HorizontalAlignment="Left" Margin="95,80,0,0" TextWrapping="Wrap" Text="Телефон:" VerticalAlignment="Top" x:Name="phone"/>
+        <ListBox ItemsSource="{Binding}" Margin="150,78,550,291" ScrollViewer.VerticalScrollBarVisibility="Disabled" Name="numbers" BorderBrush="White" Focusable="False"/>
+
+        <DataGrid  ItemsSource="{Binding}" Margin="18,168,18,90" x:Name="apt"/>
+        <Button Content="Изменить" HorizontalAlignment="Left" Margin="17,50,0,0" VerticalAlignment="Top" x:Name ="changeAdress" Click="ChangeAdress_Click"/>
+        <Button Content="Изменить" HorizontalAlignment="Left" Margin="17,80,0,0" VerticalAlignment="Top" x:Name ="changePhone" Click="ChangePhone_Click"/>
+        <Button Content="Выйти" HorizontalAlignment="Center" Margin="0,365,0,0" VerticalAlignment="Top" x:Name="Exit" Click="Exit_Click"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,147,0,0" TextWrapping="Wrap" Text="Кваритиры для оценки" VerticalAlignment="Top" FontSize="16"/>
+        <Button Content="Доабваить" HorizontalAlignment="Left" Margin="590,143,0,0" VerticalAlignment="Top" Name="addApt" Click="AddApt_Click"/>
+        <Button Content="Изменить" HorizontalAlignment="Left" Margin="690,143,0,0" VerticalAlignment="Top" Name="chacngeApt" Click="ChangeApt_Click"/>
+        <Button Content="Удалить" HorizontalAlignment="Left" Margin="771,143,0,0" VerticalAlignment="Top" Name="delete" Click="Delete_Click"/>
+
+
+
+
     </Grid>
 </Window>

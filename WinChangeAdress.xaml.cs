@@ -21,7 +21,7 @@ namespace Flats
     /// </summary>
     public partial class WinChangeAdress : Window
     {
-        public string newAdress;
+        public string newAdress ="";
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
         private int regId;
         private readonly string adressText;
@@ -42,8 +42,8 @@ namespace Flats
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
-            string updateInstruction =  $"UPDATE street, client SET street.StreetName = @streetName , client.House = @house" +
-                                        $" WHERE (street.StreetName = '{splitedAdress[0]}' AND client.RegId = '{regId}')";
+            string updateInstruction =  $"UPDATE client SET Street = @streetName , client.House = @house" +
+                                        $" WHERE (Street = '{splitedAdress[0]}' AND client.RegId = '{regId}')";
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(updateInstruction, connection);
@@ -54,7 +54,7 @@ namespace Flats
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
-                newAdress = $"Адрес: {street_box.Text},{house_box.Text}";
+                newAdress = $"{street_box.Text},{house_box.Text}";
                 this.Close();
             }
             catch (MySql.Data.MySqlClient.MySqlException)

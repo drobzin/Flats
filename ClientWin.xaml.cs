@@ -1,7 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Security.Policy;
@@ -20,6 +23,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
+
 namespace Flats
 {
     /// <summary>
@@ -30,27 +34,44 @@ namespace Flats
         public int regId;
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
         private DataTable dtApt = new DataTable("Appartament");
-        string adressText = "";
+        private string adressText = "";
+        private DataTable dtId = new DataTable("ApartmentId");
+        private ObservableCollection<string> phoneNumbers = new ObservableCollection<string>();
+        private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
+        string ids;
         public ClientWin(int _regId)
         {
             InitializeComponent();
             regId = _regId;
             LoadDataGrid();
             LoadTextBoxes();
+
         }
         private void LoadDataGrid()
         {
-            string query =  $"SELECT street.StreetName, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Cost," +
-                            $" Photo, Plan FROM appartament, district,street" +
-                            $" WHERE(RegId = {regId} AND appartament.StreetId = street.StreetId AND appartament.DistrictId = district.idDistrict); ";
-            MySqlDataAdapter adapter = new MySqlDataAdapter(query, dataConnect);
+            dtId.Reset();
+            appartmentId.Clear();
+            dtApt.Clear();
+            string query =  $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Cost," +
+                            $" Photo, Plan FROM appartament, district" +
+                            $" WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict); ";
+            string idquery = $"SELECT idAppartament FROM appartament, district WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict)";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(query, dataConnect);           
             adapter.Fill(dtApt);
-            apt.DataContext = dtApt;
+            
+            MySqlDataAdapter idAdapter = new MySqlDataAdapter (idquery , dataConnect);
+            idAdapter.Fill(dtId);
+            for (int i = 0; i < dtId.Rows.Count; i++)
+            {
+                appartmentId.Add(dtId.Rows[i][0].ToString());
+            }
+           
+            apt.ItemsSource = dtApt.DefaultView;
         }
         private void LoadTextBoxes()
         {
-            string query =  $"SELECT Name, street.StreetName, House, clientphone.Phone FROM client, street,clientphone" +
-                            $" WHERE (client.RegID = {regId} AND street.StreetId = client.StreetId AND clientphone.RegId = client.RegID)";
+            string query =  $"SELECT Name, client.Street, House, clientphone.Phone FROM client,clientphone" +
+                            $" WHERE (client.RegID = {regId}  AND clientphone.RegId = client.RegID)";
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             connection.Open();
@@ -63,14 +84,13 @@ namespace Flats
                 if (i < 2)
                 {
                     name.Text += $" {reader.GetString(0)}";
-                    adressText = $"{reader.GetString(1)},{reader.GetString(2)}" ;
+                    adressText = $"{reader.GetString(1)},{reader.GetString(2)}";
                     adress.Text += $" {adressText}";
-                    phone.Text += $" {reader.GetString(3)}";
+                    phoneNumbers.Add(reader.GetString(3));
                 }
-                else phone.Text += $"\n\t {reader.GetString(3)}";
-
+                else phoneNumbers.Add(reader.GetString(3));
             }
-            
+            numbers.ItemsSource = phoneNumbers; 
             connection.Close();
         }
         protected override void OnClosed(EventArgs e)
@@ -83,18 +103,66 @@ namespace Flats
         {
             WinChangeAdress changeAdress = new WinChangeAdress(adressText, regId);
             changeAdress.ShowDialog();
-            adress.Text = changeAdress.newAdress;
-
+            if (changeAdress.newAdress != "")
+            {
+                adressText = changeAdress.newAdress;
+                adress.Text = $"Адрес: {adressText}";
+            }
         }
 
-        private void ChangePhone_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Я НЕ ЕБУ ЧТО С ЭТИМ ДЕЛАТЬ ПОМЩЬ! ПОМОЩЬ!");
+        private void ChangePhone_Click(object sender, RoutedEventArgs e) 
+        { 
+            WinChangePhone changePhone = new WinChangePhone(phoneNumbers, regId);
+            changePhone.ShowDialog();
+            phoneNumbers = changePhone.phoneNumbers;
+            
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void AddApt_Click(object sender, RoutedEventArgs e)
+        {
+            WinChangeClientApt winChangeClientApt = new WinChangeClientApt(regId);
+            winChangeClientApt.ShowDialog();
+            LoadDataGrid();
+
+        }
+
+        private void ChangeApt_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                WinChangeClientApt winChangeClientApt = new WinChangeClientApt(regId, dtApt.Rows[apt.SelectedIndex], appartmentId[apt.SelectedIndex]);
+                winChangeClientApt.ShowDialog();
+                LoadDataGrid();
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+                MessageBox.Show("Выберите строку для изменения");
+            }
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string deleteInstruction = $"DELETE FROM appartament  WHERE (idAppartament = @id)";
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = dataConnect;
+                MySqlCommand cmd = new MySqlCommand(deleteInstruction, connection);
+                cmd.Parameters.AddWithValue("@id", appartmentId[apt.SelectedIndex]);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                LoadDataGrid() ;
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Выберите строку для удаления");
+            }
         }
     }
 }

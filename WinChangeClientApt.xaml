@@ -1,0 +1,68 @@
+﻿<Window x:Class="Flats.WinChangeClientApt"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flats"
+        mc:Ignorable="d"
+        Title="WinChangeClientApt" Height="475" Width="450">
+    <Grid>
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="377" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="Street" VerticalAlignment="Top" Name="street" Target="{Binding ElementName=street_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="street_box" />
+            
+            <Label HorizontalAlignment="Left"   Content="House" VerticalAlignment="Top" Name="house" Target="{Binding ElementName=house_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
+            <Label HorizontalAlignment="Left"   Content="Flat" VerticalAlignment="Top" Name="flat" Target="{Binding ElementName=flat_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="flat_box" />
+            <Label HorizontalAlignment="Left"   Content="District" VerticalAlignment="Top" Name="district" Target="{Binding ElementName=district_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Name="district_comboBox" />
+            
+            <Label HorizontalAlignment="Left"   Content="Floors" VerticalAlignment="Top" Name="floors" Target="{Binding ElementName=floors_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floors_box" />
+            <Label HorizontalAlignment="Left"   Content="Floor" VerticalAlignment="Top" Name="floor" Target="{Binding ElementName=floor_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floor_box" />
+            <Label HorizontalAlignment="Left"   Content="TypeHouse" VerticalAlignment="Top" Name="typeHouse" Target="{Binding ElementName=typeHouse_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="typeHouse_comboBox" >
+                <ComboBoxItem Content="Панельный"/>
+                <ComboBoxItem Content="Кирпичный"/>
+            </ComboBox>
+
+            <Label HorizontalAlignment="Left"   Content="TypeToilet" VerticalAlignment="Top" Name="typeToilet" Target="{Binding ElementName=typeToilet_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="typeToilet_comboBox" >
+                <ComboBoxItem Content="Раздельный"/>
+                <ComboBoxItem Content="Совмещенный"/>
+            </ComboBox>
+
+            <Label HorizontalAlignment="Left"   Content="TypePlan" VerticalAlignment="Top" Name="typePlan" Target="{Binding ElementName=typePlan_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="typePlan_comboBox" >
+                <ComboBoxItem Content="Хрущевка"/>
+                <ComboBoxItem Content="Новая"/>
+            </ComboBox>
+
+            <Label HorizontalAlignment="Left"   Content="SqAll" VerticalAlignment="Top" Name="sqAll" Target="{Binding ElementName=sqAll_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sqAll_box" />
+            <Label HorizontalAlignment="Left"   Content="Private" VerticalAlignment="Top" Name="private" Target="{Binding ElementName=private_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="private_comboBox" >
+                <ComboBoxItem Content="Нет"/>
+                <ComboBoxItem Content="Есть"/>
+            </ComboBox>
+
+            <Label HorizontalAlignment="Left"   Content="Phone" VerticalAlignment="Top" Name="phone" Target="{Binding ElementName=phone_comboBox}"/>
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="phone_comboBox" >
+                <ComboBoxItem Content="Нет"/>
+                <ComboBoxItem Content="Есть"/>
+            </ComboBox>
+
+            <Label HorizontalAlignment="Left"   Content="Cost" VerticalAlignment="Top" Name="cost" Target="{Binding ElementName=cost_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="cost_box" />
+            <Label HorizontalAlignment="Left"   Content="Photo" VerticalAlignment="Top" Name="photo" Target="{Binding ElementName=photo_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="photo_box" />
+            <Label HorizontalAlignment="Left"   Content="Plan" VerticalAlignment="Top" Name="plan" Target="{Binding ElementName=plan_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="plan_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="168,404,0,0" VerticalAlignment="Top" Name ="Add" Click="Add_Click"/>
+
+
+    </Grid>
+</Window>
