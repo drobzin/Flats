@@ -23,7 +23,7 @@ namespace Flats
     {
         public string newAdress ="";
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
-        private int regId;
+        private readonly int regId;
         private readonly string adressText;
         string[] splitedAdress;
         public WinChangeAdress(string _adressText , int _regId)

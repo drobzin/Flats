@@ -22,9 +22,10 @@ namespace Flats
     public partial class WinChangeClientApt : Window
     {
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
-        private int regId;
-        private string aptId;
-        private DataRow rowToChange;
+        private readonly int regId;
+        private readonly string aptId;
+        private readonly DataRow rowToChange;
+        private string insertedAptId;
         public WinChangeClientApt(int _regId, DataRow selectedRow = null, string idApt ="0")
         {
             InitializeComponent();
@@ -42,23 +43,27 @@ namespace Flats
         {
             string insertInstruction = "INSERT INTO appartament SET Street = @0,House = @1,Flat = @2," +
                                         "DistrictId = (SELECT idDistrict from district where District = @districtName),Floors = @3,Floor = @4,TypeHouse = @typeHouse," +
-                                        "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone,Cost = @6, " +
+                                        "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone, " +
                                         "Photo = null, Plan = null, RegID = @regId";
-            string updateInstruction = "UPDATE appartament SET Street = @0, House = @1, Flat = DistrictId = (SELECT idDistrict from district where District = @districtName),Floors = @3,Floor = @4,TypeHouse = @typeHouse," +
-                                        "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone,Cost = @6, " +
+            string updateInstruction = "UPDATE appartament SET Street = @0, House = @1, Flat =@2, DistrictId = (SELECT idDistrict from district where District = @districtName)," +
+                                        "Floors = @3,Floor = @4,TypeHouse = @typeHouse," +
+                                        "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone, " +
                                         $"Photo = null, Plan = null, RegID = @regId WHERE idAppartament = '{aptId}'";
-            if (rowToChange != null) AddRow(updateInstruction); 
-            else AddRow(insertInstruction);
+            if (rowToChange != null) AddRow(updateInstruction);
+            else
+            {
+                AddRow(insertInstruction);
+                AddTreetyRow();
 
+            }
         }
 
         private void AddRow(string instruction)
         {
-           
+            string getAptId = "SELECT last_insert_id()";
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(instruction, connection);
-            cmd.Parameters.AddWithValue("@street", street_box.Text);
 
             int i = 0;
             foreach (Control item in wrapPanel.Children)
@@ -83,13 +88,12 @@ namespace Flats
             cmd.Parameters.AddWithValue("@isPrivate", private_comboBox.SelectedIndex);
             cmd.Parameters.AddWithValue("@isPhone", phone_comboBox.SelectedIndex);
             cmd.Parameters.AddWithValue("@regId", regId);
-
-
-
             try
             {
                 connection.Open();
                 cmd.ExecuteNonQuery();
+                cmd.CommandText = getAptId;
+                insertedAptId = cmd.ExecuteScalar().ToString();
                 connection.Close();
                 Close();
             }
@@ -98,7 +102,23 @@ namespace Flats
                 MessageBox.Show("Неправильный формат данных");
             }
         }
+        private void AddTreetyRow()
+        {
+            string insertInstruction = "INSERT INTO treety SET DateStart = CURDATE(), DateStop =DATE_ADD(CURDATE(), INTERVAL 1 MONTH), Bonus = @bonus, AppartamentId = @aptId;";
+            int bonus = Convert.ToInt32(sqAll_box.Text) * 100;
+            MySqlConnection connection = new MySqlConnection();
+            connection.ConnectionString = dataConnect;
+            MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
+            cmd.Parameters.AddWithValue("@aptId", insertedAptId);
+            cmd.Parameters.AddWithValue("@bonus", bonus);
+            connection.Open();
+            cmd.ExecuteNonQuery();
+            connection.Close();
+            Close();
+            
+          
 
+        }
         private void LoadComboBox()
         {
             string districtInstruction = "SELECT District FROM district";
@@ -121,12 +141,12 @@ namespace Flats
             int i = 0;
             foreach (Control item in wrapPanel.Children)
             {
-                if (item is TextBox textBox && textBox != cost_box)
+                if (item is TextBox textBox )
                 {
                     textBox.Text = rowToChange[i].ToString();
                     i++;
                 }
-                else if (item is ComboBox || item == cost_box) i++;
+                else if (item is ComboBox ) i++;
             }
         }
     }

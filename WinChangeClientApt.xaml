@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="WinChangeClientApt" Height="475" Width="450">
     <Grid>
-        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="377" Margin="10,10,0,0">
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="336" Margin="10,10,0,0">
             <Label HorizontalAlignment="Left"   Content="Street" VerticalAlignment="Top" Name="street" Target="{Binding ElementName=street_comboBox}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="street_box" />
             
@@ -43,19 +43,18 @@
             <Label HorizontalAlignment="Left"   Content="SqAll" VerticalAlignment="Top" Name="sqAll" Target="{Binding ElementName=sqAll_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sqAll_box" />
             <Label HorizontalAlignment="Left"   Content="Private" VerticalAlignment="Top" Name="private" Target="{Binding ElementName=private_comboBox}"/>
-            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="private_comboBox" >
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="private_comboBox" SelectedIndex="0" >
                 <ComboBoxItem Content="Нет"/>
                 <ComboBoxItem Content="Есть"/>
             </ComboBox>
 
             <Label HorizontalAlignment="Left"   Content="Phone" VerticalAlignment="Top" Name="phone" Target="{Binding ElementName=phone_comboBox}"/>
-            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="phone_comboBox" >
+            <ComboBox HorizontalAlignment="Left"   VerticalAlignment="Top" Width="120" Name="phone_comboBox" SelectedIndex="0" >
                 <ComboBoxItem Content="Нет"/>
                 <ComboBoxItem Content="Есть"/>
             </ComboBox>
 
-            <Label HorizontalAlignment="Left"   Content="Cost" VerticalAlignment="Top" Name="cost" Target="{Binding ElementName=cost_box}"/>
-            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="cost_box" />
+           
             <Label HorizontalAlignment="Left"   Content="Photo" VerticalAlignment="Top" Name="photo" Target="{Binding ElementName=photo_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="photo_box" />
             <Label HorizontalAlignment="Left"   Content="Plan" VerticalAlignment="Top" Name="plan" Target="{Binding ElementName=plan_box}"/>

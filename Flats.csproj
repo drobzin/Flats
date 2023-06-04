@@ -39,6 +39,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MySQL\Connector NET 8.0\Assemblies\v4.5.2\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -77,6 +78,9 @@
     <Compile Include="AdminWin.xaml.cs">
       <DependentUpon>AdminWin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AgentWin.xaml.cs">
+      <DependentUpon>AgentWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClientWin.xaml.cs">
       <DependentUpon>ClientWin.xaml</DependentUpon>
     </Compile>
@@ -114,6 +118,10 @@
       <DependentUpon>WinChangePhone.xaml</DependentUpon>
     </Compile>
     <Page Include="AdminWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AgentWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -33,23 +33,26 @@ namespace Flats
                 case 0: // Клиент
                     string userSelection = "SELECT RegId FROM CLIENT WHERE (Login =@login AND Password = @password)";
                     object userAnswer = FindUser(userSelection);
-                    if (userAnswer != null) //Тут должно производится открытие клиентского окна и передача его айдишника туда
+                    if (userAnswer != null)
                     {
                         ClientWin clientWin = new ClientWin(Convert.ToInt32(userAnswer));
                         clientWin.Owner = this;
                         clientWin.Show();
                         this.Hide();
                     }
-                    else MessageBox.Show("fuuuuuuuuu"); // Тут по хорошему предложение зарегестрироваться или же просто вывод сообщения об ошибке
+                    else MessageBox.Show("Такого пользователя не существует"); // Тут по хорошему предложение зарегестрироваться
                     break;
                 case 1: // Агент
                     string agentSelection = "SELECT idagent FROM agent WHERE ( login = @login AND password = @password)";
                     object agentAnswer = FindUser(agentSelection);
-                    if (agentAnswer != null) //Тут должно производится открытие агентского окна и передача его айдишника туда
-                    {
-                        MessageBox.Show(agentAnswer.ToString());
+                    if (agentAnswer != null) 
+                    { 
+                        AgentWin agentWin = new AgentWin(Convert.ToInt32(agentAnswer));
+                        agentWin.Owner = this;
+                        agentWin.Show();
+                        this.Hide();
                     }
-                    else MessageBox.Show("fuuuuuuuuu"); // Тут по хорошему предложение зарегестрироваться или же просто вывод сообщения об ошибке
+                    else MessageBox.Show("fuuuuuuuuu"); // Тут вывод сообщения об ошибке
                     break;
                 case 2: // Админ
                     if (login_box.Text == "admin" && password_box.Password == "123")

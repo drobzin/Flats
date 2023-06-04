@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Relational;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -38,24 +39,26 @@ namespace Flats
         private DataTable dtId = new DataTable("ApartmentId");
         private ObservableCollection<string> phoneNumbers = new ObservableCollection<string>();
         private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
-        string ids;
+        private readonly string thirdQuary;
+        private readonly  string thirdIdQuary;
         public ClientWin(int _regId)
         {
             InitializeComponent();
             regId = _regId;
-            LoadDataGrid();
             LoadTextBoxes();
+            thirdQuary = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                            $" Photo, Plan, Cost FROM appartament, district" +
+                            $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}); ";
+            thirdIdQuary = $"SELECT idAppartament FROM appartament, district WHERE (Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId})";
+
 
         }
-        private void LoadDataGrid()
+        private void LoadDataGrid(string query, string idquery)
         {
             dtId.Reset();
             appartmentId.Clear();
             dtApt.Clear();
-            string query =  $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Cost," +
-                            $" Photo, Plan FROM appartament, district" +
-                            $" WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict); ";
-            string idquery = $"SELECT idAppartament FROM appartament, district WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict)";
+            
             MySqlDataAdapter adapter = new MySqlDataAdapter(query, dataConnect);           
             adapter.Fill(dtApt);
             
@@ -70,6 +73,7 @@ namespace Flats
         }
         private void LoadTextBoxes()
         {
+            
             string query =  $"SELECT Name, client.Street, House, clientphone.Phone FROM client,clientphone" +
                             $" WHERE (client.RegID = {regId}  AND clientphone.RegId = client.RegID)";
             MySqlConnection connection = new MySqlConnection();
@@ -93,11 +97,7 @@ namespace Flats
             numbers.ItemsSource = phoneNumbers; 
             connection.Close();
         }
-        protected override void OnClosed(EventArgs e)
-        {
-            Owner.Show();
-            base.OnClosed(e);
-        }
+       
 
         private void ChangeAdress_Click(object sender, RoutedEventArgs e)
         {
@@ -106,7 +106,7 @@ namespace Flats
             if (changeAdress.newAdress != "")
             {
                 adressText = changeAdress.newAdress;
-                adress.Text = $"Адрес: {adressText}";
+                adress.Text = $"Адрес проживания: {adressText}";
             }
         }
 
@@ -118,16 +118,13 @@ namespace Flats
             
         }
 
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
+       
 
         private void AddApt_Click(object sender, RoutedEventArgs e)
         {
             WinChangeClientApt winChangeClientApt = new WinChangeClientApt(regId);
             winChangeClientApt.ShowDialog();
-            LoadDataGrid();
+            LoadDataGrid(thirdQuary, thirdIdQuary);
 
         }
 
@@ -137,7 +134,7 @@ namespace Flats
             {
                 WinChangeClientApt winChangeClientApt = new WinChangeClientApt(regId, dtApt.Rows[apt.SelectedIndex], appartmentId[apt.SelectedIndex]);
                 winChangeClientApt.ShowDialog();
-                LoadDataGrid();
+                LoadDataGrid(thirdQuary,thirdIdQuary);
             }
             catch (System.IndexOutOfRangeException)
             {
@@ -157,11 +154,57 @@ namespace Flats
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
-                LoadDataGrid() ;
+                LoadDataGrid(thirdQuary, thirdIdQuary) ;
             }
             catch (System.ArgumentOutOfRangeException)
             {
                 MessageBox.Show("Выберите строку для удаления");
+            }
+        }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            Owner.Show();
+            base.OnClosed(e);
+        }
+
+        private void TableType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string query = "";
+            string idquery = "";
+            addApt.Visibility = Visibility.Collapsed;
+            chacngeApt.Visibility = Visibility.Collapsed;
+            delete.Visibility = Visibility.Collapsed;
+            switch (tableType.SelectedIndex)
+            {
+                case 0:// Все
+                    query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                           $" Photo, Plan, Cost FROM appartament, district" +
+                           $" WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict); ";
+                    idquery = $"SELECT idAppartament FROM appartament, district WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict)"; 
+
+                    LoadDataGrid(query, idquery);                   
+                    break;
+                case 1: // Оцененные
+                    query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                           $" Photo, Plan, Cost FROM appartament, district" +
+                           $" WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}); ";
+
+                    idquery = $"SELECT idAppartament FROM appartament, district WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId})";
+                    LoadDataGrid(query, idquery);                  
+                    break;
+               
+                case 2: //Не оценненые
+                    query = thirdQuary;
+                    idquery = thirdIdQuary;
+                    LoadDataGrid(query, idquery);                    
+                    addApt.Visibility = Visibility.Visible;
+                    chacngeApt.Visibility = Visibility.Visible;
+                    delete.Visibility = Visibility.Visible;
+                    break;
             }
         }
     }
