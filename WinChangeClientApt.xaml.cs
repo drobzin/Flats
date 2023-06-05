@@ -50,17 +50,11 @@ namespace Flats
                                         "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone, " +
                                         $"Photo = null, Plan = null, RegID = @regId WHERE idAppartament = '{aptId}'";
             if (rowToChange != null) AddRow(updateInstruction);
-            else
-            {
-                AddRow(insertInstruction);
-                AddTreetyRow();
-
-            }
+            else AddRow(insertInstruction);
         }
 
         private void AddRow(string instruction)
         {
-            string getAptId = "SELECT last_insert_id()";
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(instruction, connection);
@@ -91,9 +85,7 @@ namespace Flats
             try
             {
                 connection.Open();
-                cmd.ExecuteNonQuery();
-                cmd.CommandText = getAptId;
-                insertedAptId = cmd.ExecuteScalar().ToString();
+                cmd.ExecuteNonQuery();                
                 connection.Close();
                 Close();
             }
@@ -102,23 +94,7 @@ namespace Flats
                 MessageBox.Show("Неправильный формат данных");
             }
         }
-        private void AddTreetyRow()
-        {
-            string insertInstruction = "INSERT INTO treety SET DateStart = CURDATE(), DateStop =DATE_ADD(CURDATE(), INTERVAL 1 MONTH), Bonus = @bonus, AppartamentId = @aptId;";
-            int bonus = Convert.ToInt32(sqAll_box.Text) * 100;
-            MySqlConnection connection = new MySqlConnection();
-            connection.ConnectionString = dataConnect;
-            MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
-            cmd.Parameters.AddWithValue("@aptId", insertedAptId);
-            cmd.Parameters.AddWithValue("@bonus", bonus);
-            connection.Open();
-            cmd.ExecuteNonQuery();
-            connection.Close();
-            Close();
-            
-          
-
-        }
+       
         private void LoadComboBox()
         {
             string districtInstruction = "SELECT District FROM district";

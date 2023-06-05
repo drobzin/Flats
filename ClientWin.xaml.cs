@@ -41,16 +41,20 @@ namespace Flats
         private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
         private readonly string thirdQuary;
         private readonly  string thirdIdQuary;
+        private bool isIntialized = false;
         public ClientWin(int _regId)
         {
             InitializeComponent();
+            isIntialized = true;
             regId = _regId;
             LoadTextBoxes();
             thirdQuary = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
                             $" Photo, Plan, Cost FROM appartament, district" +
-                            $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}); ";
-            thirdIdQuary = $"SELECT idAppartament FROM appartament, district WHERE (Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId})";
+                            $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}  AND AgentId IS NULL); ";
 
+            thirdIdQuary = $"SELECT idAppartament FROM appartament, district" +
+                            $" WHERE (Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}  AND AgentId IS NULL)";
+            LoadDataGrid(thirdQuary, thirdIdQuary);
 
         }
         private void LoadDataGrid(string query, string idquery)
@@ -173,39 +177,53 @@ namespace Flats
 
         private void TableType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string query = "";
-            string idquery = "";
-            addApt.Visibility = Visibility.Collapsed;
-            chacngeApt.Visibility = Visibility.Collapsed;
-            delete.Visibility = Visibility.Collapsed;
-            switch (tableType.SelectedIndex)
+            if (isIntialized)
             {
-                case 0:// Все
-                    query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
-                           $" Photo, Plan, Cost FROM appartament, district" +
-                           $" WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict); ";
-                    idquery = $"SELECT idAppartament FROM appartament, district WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict)"; 
+                string query = "";
+                string idquery = "";
+                addApt.Visibility = Visibility.Collapsed;
+                chacngeApt.Visibility = Visibility.Collapsed;
+                delete.Visibility = Visibility.Collapsed;
+                switch (tableType.SelectedIndex)
+                {
+                    case 0:// Все
+                        query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                               $" Photo, Plan, Cost FROM appartament, district" +
+                               $" WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict); ";
+                        idquery = $"SELECT idAppartament FROM appartament, district WHERE(RegId = {regId}  AND appartament.DistrictId = district.idDistrict)";
 
-                    LoadDataGrid(query, idquery);                   
-                    break;
-                case 1: // Оцененные
-                    query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
-                           $" Photo, Plan, Cost FROM appartament, district" +
-                           $" WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}); ";
+                        LoadDataGrid(query, idquery);
+                        break;
+                    case 1: // Оцененные
+                        query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                               $" Photo, Plan, Cost FROM appartament, district" +
+                               $" WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}); ";
 
-                    idquery = $"SELECT idAppartament FROM appartament, district WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId})";
-                    LoadDataGrid(query, idquery);                  
-                    break;
-               
-                case 2: //Не оценненые
-                    query = thirdQuary;
-                    idquery = thirdIdQuary;
-                    LoadDataGrid(query, idquery);                    
-                    addApt.Visibility = Visibility.Visible;
-                    chacngeApt.Visibility = Visibility.Visible;
-                    delete.Visibility = Visibility.Visible;
-                    break;
+                        idquery = $"SELECT idAppartament FROM appartament, district WHERE(Cost is NOT NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId})";
+                        LoadDataGrid(query, idquery);
+                        break;
+
+                    case 2: //В обработке
+                        query = $"SELECT Street, House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone," +
+                                $" Photo, Plan, Cost FROM appartament, district" +
+                                $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId}  AND AgentId IS NOT NULL); ";
+
+                        idquery = $"SELECT idAppartament FROM appartament, district" +
+                                    $" WHERE (Cost is NULL  AND appartament.DistrictId = district.idDistrict AND RegId = {regId} " +
+                                    $" AND AgentId IS NOT NULL)";
+
+                        LoadDataGrid(query, idquery);
+                        break;
+                    case 3: // Не оценненые
+                        query = thirdQuary;
+                        idquery = thirdIdQuary;
+                        LoadDataGrid(query, idquery);
+                        addApt.Visibility = Visibility.Visible;
+                        chacngeApt.Visibility = Visibility.Visible;
+                        delete.Visibility = Visibility.Visible;
+                        break;
+                }
             }
-        }
+        }        
     }
 }

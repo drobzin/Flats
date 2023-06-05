@@ -6,13 +6,19 @@
         xmlns:local="clr-namespace:Flats"
         mc:Ignorable="d"
         Title="AgentWin" Height="450" Width="946">
+    
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="95,20,0,0" TextWrapping="Wrap" Text="Имя:" VerticalAlignment="Top" x:Name="name"/>
-        <TextBlock HorizontalAlignment="Center" Margin="0,147,0,0" TextWrapping="Wrap" Text="Кваритиры для оценки" VerticalAlignment="Top" FontSize="16"/>
+        <ComboBox Style="{DynamicResource ComboBoxStyle1}" HorizontalAlignment="Center" Margin="0,133,0,0"  VerticalAlignment="Top" FontSize="16" Name="typeFlats" SelectionChanged="TypeFlats_SelectionChanged">
+            <ComboBoxItem Content="Квартиры для оценки"/>
+            <ComboBoxItem Content="Квартиры в обработке" IsSelected="True"/>
+        </ComboBox>
         <DataGrid  ItemsSource="{Binding}" Margin="18,168,18,90" x:Name="apt"/>
         <Button Content="Закрыть" HorizontalAlignment="Center" Margin="0,365,0,0" VerticalAlignment="Top" x:Name="Exit" Click="Exit_Click"/>
         <Button Content="Завершить оценивание" HorizontalAlignment="Left" Margin="41,63,0,0" VerticalAlignment="Top" Name="changeCost" Click="ChangeCost_Click"/>
-        <TextBox HorizontalAlignment="Left" Margin="41,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Visibility="Collapsed"  Name="cost"/>
-        <Button Content="Подтвердить" HorizontalAlignment="Left" Margin="41,123,0,0" VerticalAlignment="Top" Visibility="Collapsed" Name="accept" Click="Accept_click"/>
+        <TextBox HorizontalAlignment="Left" Margin="41,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"  Name="cost" Visibility="Collapsed"/>
+        <Button Content="Подтвердить" HorizontalAlignment="Left" Margin="41,123,0,0" VerticalAlignment="Top" Name="accept" Click="Accept_click" Visibility="Collapsed"/>
+        <Button Content="Начать оценивание" HorizontalAlignment="Left" Margin="625,143,0,0" VerticalAlignment="Top" x:Name="startWork" Click="StartWork_Click"/>
+        <Button Content="Показать телефон для связи" HorizontalAlignment="Left" Margin="766,143,0,0" VerticalAlignment="Top" Name="showPhone" Click="ShowPhone_Click"/>
     </Grid>
 </Window>
