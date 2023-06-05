@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace Flats
 {
@@ -23,41 +24,75 @@ namespace Flats
     /// </summary>
     public partial class AdminWin : Window
     {
-        private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
-        private readonly DataSet ds = new DataSet("Table names");
-        private readonly DataSet ds_load = new DataSet("All tables");
+
+        private readonly static string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
+        private string pkName = "";
+        private List<string> columnDataType = new List<string>();
+        private List<string> columnNames = new List<string>();
+        private DataTable dataTable = new DataTable("Content");
+        bool editing;
+        DataRow selectedRow;
 
 
         public AdminWin()
         {
 
             InitializeComponent();
-            LoadComboBox();
+            LoadNames();
 
         }
-        private void LoadComboBox()
+        private void LoadNames()
         {
-            string query = "show tables";
-            MySqlDataAdapter adapter = new MySqlDataAdapter(query, dataConnect);
-            adapter.Fill(ds);
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            string instruction = "show tables";
+            MySqlConnection connection = new MySqlConnection();
+            connection.ConnectionString = dataConnect;
+            connection.Open();
+            MySqlCommand cmd = new MySqlCommand(instruction, connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                var table_name = ds.Tables[0].Rows[i][0]; // Первое значение по ячейка вертикали, второе по горизонтали
-                Tables.Items.Add(table_name);
+                TableNames.Items.Add(reader.GetString(0));
             }
+
+
         }
-        private void Tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+
+        private void TableNames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            RefreshTable();
+            LoadNamesList();
+        }
+
+        private void RefreshTable()
+        {
+            dataTable.Reset();
+
+            string showAllInstruction = $"select * from {TableNames.SelectedItem} ";
             try
             {
-                search_box.Clear();
-                ds_load.Reset();
 
-                string query_load = $"select * from {Tables.SelectedItem}";
-                MySqlDataAdapter adapter = new MySqlDataAdapter(query_load, dataConnect);
-                adapter.Fill(ds_load);
-                Database.DataContext = ds_load.Tables[0];
-                Load_names_list(ds_load.Tables[0]);
+                columnNames.Clear();
+                columnDataType.Clear();
+                pkName = "";
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = dataConnect;
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand(showAllInstruction, connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+                pkName = reader.GetName(0);
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    DataColumn column = new DataColumn();
+                    column.DataType = System.Type.GetType("System.String");
+                    column.ColumnName = reader.GetName(i);
+                    columnDataType.Add(reader.GetDataTypeName(i).ToString());
+                    columnNames.Add(reader.GetName(i).ToString());
+                    dataTable.Columns.Add(column);
+                }
+                connection.Close();
+
+                FillListView(showAllInstruction);
 
             }
             catch (MySqlException ex)
@@ -65,245 +100,90 @@ namespace Flats
                 MessageBox.Show(ex.Message);
             }
         }
+
         private void Create_Row_Click(object sender, RoutedEventArgs e)
         {
-            Database.SelectedIndex = -1;
-            switch (Tables.SelectedIndex)
+            selectedRow = null;
+            editing = false;
+            OpenWindow();
+
+        }
+
+        private void OpenWindow()
+        {
+            switch (TableNames.SelectedIndex)
             {
                 case 0:
-                    Add_New_Appartment_Row();
+                    WinAddNewAgentRow agentWin = new WinAddNewAgentRow (selectedRow, editing); 
+                    ChangeRow(agentWin);
                     break;
                 case 1:
-                    Add_New_Client_Row();
+                    WinAddNewAppartmentRow aptWin = new WinAddNewAppartmentRow(selectedRow, editing);
+                    ChangeRow(aptWin);
                     break;
                 case 2:
-                    Add_New_ClientPhone_Row();
+                    WinAddNewClientRow clientWin = new WinAddNewClientRow(selectedRow, editing);
+                    ChangeRow(clientWin);
                     break;
                 case 3:
-                    Add_New_District_Row();
+                    WinAddNewClientphoneRow clientPhoneWin = new WinAddNewClientphoneRow(selectedRow, editing);
+                    ChangeRow(clientPhoneWin);
                     break;
+
                 case 4:
-                    Add_New_Street_Row();
-                    break;
+                    WinAddNewDistrict districtWin = new WinAddNewDistrict(selectedRow, editing);
+                    ChangeRow(districtWin);
+                    break;             
                 case 5:
-                    Add_New_Treety_Row();
+                    WinAddNewTreetyRow treetyWin = new WinAddNewTreetyRow(selectedRow, editing);
+                    ChangeRow(treetyWin);
                     break;
             }
-        }
-        private void Add_New_Appartment_Row()
-        {
-            WinAddNewAppartmentRow win_add_new_apt_row = new WinAddNewAppartmentRow(Database.SelectedIndex);
-            win_add_new_apt_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_apt_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Add_New_Client_Row()
-        {
-            WinAddNewClientRow win_add_new_client_row = new WinAddNewClientRow(Database.SelectedIndex);
-            win_add_new_client_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_client_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
 
         }
 
-        private void Add_New_ClientPhone_Row()
+        private void ChangeRow(Window window)
         {
-            WinAddNewClientphoneRow win_add_new_clientphone_row = new WinAddNewClientphoneRow(Database.SelectedIndex);
-            win_add_new_clientphone_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_clientphone_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-
-        }
-        private void Add_New_District_Row()
-        {
-            WinAddNewDistrict win_add_new_district_row = new WinAddNewDistrict(Database.SelectedIndex);
-            win_add_new_district_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_district_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Add_New_Street_Row()
-        {
-            WinAddNewStreet win_add_new_street_row = new WinAddNewStreet(Database.SelectedIndex);
-            win_add_new_street_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_street_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-
-        }
-        private void Add_New_Treety_Row()
-        {
-            WinAddNewTreetyRow win_add_new_treety_row = new WinAddNewTreetyRow(Database.SelectedIndex);
-            win_add_new_treety_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_treety_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-
+            window.ShowDialog();
+            RefreshTable();
         }
 
-        private void Delete_row_Click(object sender, RoutedEventArgs e)
-        {
-            int index;
-            string sql = $"select * from {Tables.SelectedItem}";
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, dataConnect);
 
-            index = Database.SelectedIndex;
+        private void Edit_Row_Click(object sender, RoutedEventArgs e)
+        {
+            selectedRow = null;
             try
             {
-                ds_load.Tables[0].Rows[index].Delete();
-                MySqlCommandBuilder cmd = new MySqlCommandBuilder(adapter);
-                adapter.DeleteCommand = cmd.GetDeleteCommand();
-                adapter.Update(ds_load.Tables[0]);
-                ds_load.AcceptChanges();
-
-                Database.DataContext = ds_load.Tables[0];
+                selectedRow = dataTable.Rows[content.SelectedIndex];
+                editing = true;
+                OpenWindow();
             }
-            catch (System.IndexOutOfRangeException)
+            catch (IndexOutOfRangeException)
             {
                 MessageBox.Show("Выберите строку");
             }
         }
-        private void Edit_Row_Click(object sender, RoutedEventArgs e)
-        {
-            if (Database.SelectedIndex == -1)
-            {
-                MessageBox.Show("Выберите строку для изменения");
-            }
-            else
-            {
-                switch (Tables.SelectedIndex)
-                {
-                    case 0:
-                        Edit_Appartment_Row();
-                        break;
-                    case 1:
-                        Edit_Client_Row();
-                        break;
-                    case 2:
-                        Edit_ClientPhone_Row();
-                        break;
-                    case 3:
-                        Edit_District_Row();
-                        break;
-                    case 4:
-                        Edit_Street_Row();
-                        break;
-                    case 5:
-                        Edit_Treety_Row();
-                        break;
-                }
-            }
-        }
 
-        private void Edit_Appartment_Row()
+        private void Delete_row_Click(object sender, RoutedEventArgs e)
         {
-            WinAddNewAppartmentRow win_add_new_apt_row = new WinAddNewAppartmentRow(Database.SelectedIndex);
-            win_add_new_apt_row.ShowDialog();
             try
             {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_apt_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
+                int id = Convert.ToInt32(dataTable.Rows[content.SelectedIndex][0]);
+                string deleteInstruction = $"DELETE FROM {TableNames.SelectedItem} WHERE ({pkName} = @id)";
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = dataConnect;
+                MySqlCommand cmd = new MySqlCommand(deleteInstruction, connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                RefreshTable();
             }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Edit_Client_Row()
-        {
-            WinAddNewClientRow win_add_new_client_row = new WinAddNewClientRow(Database.SelectedIndex);
-            win_add_new_client_row.ShowDialog();
-            try
+            catch (System.ArgumentOutOfRangeException)
             {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_client_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
+                MessageBox.Show("Выберите строку для удаления");
             }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Edit_ClientPhone_Row()
-        {
-            WinAddNewClientphoneRow win_add_new_clientphone_row = new WinAddNewClientphoneRow(Database.SelectedIndex);
-            win_add_new_clientphone_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_clientphone_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
 
-        }
-        private void Edit_District_Row()
-        {
-            WinAddNewDistrict win_add_new_district_row = new WinAddNewDistrict(Database.SelectedIndex);
-            win_add_new_district_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_district_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Edit_Street_Row()
-        {
-            WinAddNewStreet win_add_new_street_row = new WinAddNewStreet(Database.SelectedIndex);
-            win_add_new_street_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_street_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-        }
-        private void Edit_Treety_Row()
-        {
-            WinAddNewTreetyRow win_add_new_treety_row = new WinAddNewTreetyRow(Database.SelectedIndex);
-            win_add_new_treety_row.ShowDialog();
-            try
-            {
-                ds_load.Clear();
-                ds_load.Merge(win_add_new_treety_row.ds_edit);
-                Database.DataContext = ds_load.Tables[0];
-            }
-            catch (System.IndexOutOfRangeException) { }
-
-        }
-
-        private void Load_names_list(DataTable helptable)
-        {
-            names_list.Items.Clear();
-            foreach (DataColumn helpcolumn in helptable.Columns)
-            {
-                names_list.Items.Add(helpcolumn.ColumnName);
-            }
         }
 
         private void Search_btn_Click(object sender, RoutedEventArgs e)
@@ -329,126 +209,108 @@ namespace Flats
                 else
                 {
                     filter_columname = names_list.SelectedItem.ToString();
-                    GetColumnDataType(ds_load.Tables[0], ref src_column_type);
-                    switch (src_column_type[names_list.SelectedIndex])
-                    {
-                        case "System.Date":
-                            DateTime result_date;
-                            bool success_data = DateTime.TryParse(filter_value, out result_date);
-                            if (success_data)
-                            {
-                                Search(filter_columname, filter_value);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Введенное вами значение не является датой");
-                            }
-                            break;
-                        case "System.Int32":
-                            Int16 result_int;
-                            bool success_int = Int16.TryParse(filter_value, out result_int);
-                            if (success_int)
-                            {
-                                Search(filter_columname, filter_value);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Введенное вами значение не является числом!");
-                            }
-                            break;
-                        case "System.String":
-                            Search(filter_columname, filter_value);
-                            break;
+                    Search(filter_columname, filter_value);
 
-                        default:
-                            Search(filter_columname, filter_value);
-                            break;
 
-                    }
 
                 }
             }
         }
-
-        private void Reset_search_btn_Click(object sender, RoutedEventArgs e)
-        {
-            ds_load.Clear();
-            string sql = $"select * from {Tables.SelectedItem}";
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, dataConnect);
-            adapter.Fill(ds_load);
-            Database.DataContext = ds_load.Tables[0];
-        }
-
-        private void GetColumnDataType(DataTable helpTable, ref string[] columnType)
-        {
-            int j;
-            foreach (DataColumn helpColumn in helpTable.Columns)
-            {
-                j = helpColumn.Ordinal;
-                columnType[j] = helpColumn.DataType.ToString();
-            }
-        }
-
         private void Search(string filter_columname, string filter_value)
         {
-            string filter = "";
+            string selectInstruction = $"SELECT * FROM {TableNames.SelectedItem} WHERE {filter_columname}";
             switch (filter_type.SelectedIndex)
             {
                 case 0:
-                    filter = $"{filter_columname} ='{filter_value}'";
+                    selectInstruction += $"= '{filter_value}'";
                     break;
                 case 1:
-                    filter = $"{filter_columname} LIKE '%{filter_value}%'";
+                    selectInstruction += $" LIKE '%{filter_value}%'";
                     break;
                 case 2:
-                    filter = $"{filter_columname} LIKE '{filter_value}%'";
+                    selectInstruction += $" LIKE '{filter_value}%'";
                     break;
                 case 3:
-                    filter = $"{filter_columname} > '{filter_value}'";
+                    selectInstruction += $" > '{filter_value}'";
                     break;
                 case 4:
-                    filter = $"{filter_columname} >= '{filter_value}'";
+                    selectInstruction += $" >= '{filter_value}'";
                     break;
                 case 5:
-                    filter = $"{filter_columname} <'{filter_value}'";
+                    selectInstruction += $" < '{filter_value}'";
                     break;
                 case 6:
-                    filter = $"{filter_columname} <='{filter_value}'";
+                    selectInstruction += $" <= '{filter_value}'";
                     break;
+
             }
-            DataRow[] help_DataRows = ds_load.Tables[0].Copy().Select(filter);
-            ds_load.Clear();
-            for (int i = 0; i < help_DataRows.Length; i++)
+            FillListView(selectInstruction);
+
+        }
+
+        private void FillListView(string instruction)
+        {
+            dataTable.Clear();
+            DataTable _dataTable = new DataTable("ShowContent");
+            _dataTable = dataTable.Copy();
+            DataRow newRow;
+            MySqlConnection connection = new MySqlConnection();
+            connection.ConnectionString = dataConnect;
+            connection.Open();
+            MySqlCommand cmd = new MySqlCommand(instruction, connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                ds_load.Tables[0].ImportRow(help_DataRows[i]);
+                newRow = _dataTable.NewRow();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    try
+                    {
 
+                        newRow[i] = $"{reader.GetString(i)}";
+                    }
+                    catch (System.Data.SqlTypes.SqlNullValueException)
+                    {
+                        newRow[i] = "Null";
+                    }
+                }
+                //viewList.Add(newRow);
+                _dataTable.Rows.Add(newRow);
+            }
+            connection.Close();
+            content.DataContext = _dataTable;
+            dataTable.Merge(_dataTable);
+        }
+
+        private void Reset_search_btn_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshTable();
+        }
+
+        private void Names_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (names_list.SelectedIndex != -1)
+            {
+                search_box.Clear();
+                HideBoxItems();
             }
 
-            Database.DataContext = ds_load.Tables[0];
+        }
+        private void LoadNamesList()
+        {
+            names_list.SelectedIndex = -1;
+            names_list.Items.Clear();
+            foreach (string columnName in columnNames)
+            {
+                names_list.Items.Add(columnName);
+            }
         }
         private void HideBoxItems()
         {
-            string[] src_column_type = new string[names_list.Items.Count];
-            GetColumnDataType(ds_load.Tables[0], ref src_column_type);
-            switch (src_column_type[names_list.SelectedIndex])
+            switch (columnDataType[names_list.SelectedIndex])
             {
-                case "System.Date":
-                    on_entry.Visibility = Visibility.Visible;
-                    starts_with.Visibility = Visibility.Visible;
-                    higher.Visibility = Visibility.Collapsed;
-                    higher_equals.Visibility = Visibility.Collapsed;
-                    lower.Visibility = Visibility.Collapsed;
-                    lower_equals.Visibility = Visibility.Collapsed;
-                    break;
-                case "System.String":
-                    on_entry.Visibility = Visibility.Visible;
-                    starts_with.Visibility = Visibility.Visible;
-                    higher.Visibility = Visibility.Collapsed;
-                    higher_equals.Visibility = Visibility.Collapsed;
-                    lower.Visibility = Visibility.Collapsed;
-                    lower_equals.Visibility = Visibility.Collapsed;
-                    break;
-                case "System.Int32":
+                case "INT":
+                case "DECIMAL":
                     on_entry.Visibility = Visibility.Collapsed;
                     starts_with.Visibility = Visibility.Collapsed;
                     higher.Visibility = Visibility.Visible;
@@ -456,29 +318,31 @@ namespace Flats
                     lower.Visibility = Visibility.Visible;
                     lower_equals.Visibility = Visibility.Visible;
                     break;
+                case "VARCHAR":
+                case "DATE":
+                    on_entry.Visibility = Visibility.Visible;
+                    starts_with.Visibility = Visibility.Visible;
+                    higher.Visibility = Visibility.Collapsed;
+                    higher_equals.Visibility = Visibility.Collapsed;
+                    lower.Visibility = Visibility.Collapsed;
+                    lower_equals.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    on_entry.Visibility = Visibility.Collapsed;
+                    starts_with.Visibility = Visibility.Collapsed;
+                    higher.Visibility = Visibility.Collapsed;
+                    higher_equals.Visibility = Visibility.Collapsed;
+                    lower.Visibility = Visibility.Collapsed;
+                    lower_equals.Visibility = Visibility.Collapsed;
+                    break;
             }
-        }
-
-        private void Names_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            search_box.Clear();
-            HideBoxItems();
         }
         protected override void OnClosed(EventArgs e)
         {
             Owner.Show();
             base.OnClosed(e);
         }
-
     }
 }
 
-/* 
- * Добавить комбобоксы всякие для подходящих строк в таблице и выбор файлов тоже было бы здорово конечно))
- * Исправить интерфейс у датагрида, чтоб он не выглядил так ущербно (желательно сделать изменение размеров в зависимости от размеров таблицы)(поправил но все равно противный он)
- * Разобраться с датасетами (в конструкторе окон редактирования передавать ds_load и работать уже с ним)
- * ПО ХОРОШЕМУ
- * разобраться с редактированием строк в датагриде
- * мб посмотреть UI
- */
 

@@ -8,7 +8,7 @@
         Title="WinChangeClientApt" Height="475" Width="450">
     <Grid>
         <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="336" Margin="10,10,0,0">
-            <Label HorizontalAlignment="Left"   Content="Street" VerticalAlignment="Top" Name="street" Target="{Binding ElementName=street_comboBox}"/>
+            <Label HorizontalAlignment="Left"   Content="Street" VerticalAlignment="Top" Name="street" Target="{Binding ElementName=street_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="street_box" />
             
             <Label HorizontalAlignment="Left"   Content="House" VerticalAlignment="Top" Name="house" Target="{Binding ElementName=house_box}"/>

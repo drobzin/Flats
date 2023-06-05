@@ -7,11 +7,10 @@
         mc:Ignorable="d"
         Title="WinAddNewDistrict" Height="200" Width="200">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="District" VerticalAlignment="Top" Name="districttname"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="districtname_box" />
-
-
-
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="352" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="District" VerticalAlignment="Top" Name="district" Target="{Binding ElementName=district_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="district_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Name ="Add" Click="Add_Click"/>
     </Grid>
 </Window>

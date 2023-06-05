@@ -5,42 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flats"
         mc:Ignorable="d"
-        Title="WinNewCity" Height="600" Width="450">
+        Title="WinNewCity" Height="472" Width="450">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="StreetID" VerticalAlignment="Top" Name="streetid"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sreetid_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,80,0,0" TextWrapping="Wrap" Text="House" VerticalAlignment="Top" Name="house" />
-        <TextBox HorizontalAlignment="Left" Margin="20,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,140,0,0" TextWrapping="Wrap" Text="Flat" VerticalAlignment="Top" Name="flat"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="flat_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,200,0,0" TextWrapping="Wrap" Text="DistrictID" VerticalAlignment="Top" Name="districtid" />
-        <TextBox HorizontalAlignment="Left" Margin="20,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="districtid_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,260,0,0" TextWrapping="Wrap" Text="Floors" VerticalAlignment="Top" Name="floors"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,280,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floors_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,320,0,0" TextWrapping="Wrap" Text="Floor" VerticalAlignment="Top" Name="floor" />
-        <TextBox HorizontalAlignment="Left" Margin="20,340,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floor_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,380,0,0" TextWrapping="Wrap" Text="TypeHouse" VerticalAlignment="Top" Name="type_house"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,400,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="type_house_box"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,440,0,0" TextWrapping="Wrap" Text="TypeToilet" VerticalAlignment="Top" Name="type_toilet" />
-        <TextBox HorizontalAlignment="Left" Margin="20,460,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="type_toilet_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,20,0,0" TextWrapping="Wrap" Text="TypePlan" VerticalAlignment="Top" Name="type_plan"/>
-        <TextBox HorizontalAlignment="Left" Margin="300,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="type_plan_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,80,0,0" TextWrapping="Wrap" Text="SqAll" VerticalAlignment="Top" Name="sq_all" />
-        <TextBox HorizontalAlignment="Left" Margin="300,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sq_all_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,140,0,0" TextWrapping="Wrap" Text="Private" VerticalAlignment="Top" Name="private"/>
-        <TextBox HorizontalAlignment="Left" Margin="300,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="private_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,200,0,0" TextWrapping="Wrap" Text="Phone" VerticalAlignment="Top" Name="phone" />
-        <TextBox HorizontalAlignment="Left" Margin="300,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="phone_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,260,0,0" TextWrapping="Wrap" Text="Cost" VerticalAlignment="Top" Name="cost"/>
-        <TextBox HorizontalAlignment="Left" Margin="300,280,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="cost_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,320,0,0" TextWrapping="Wrap" Text="Photo" VerticalAlignment="Top" Name="photo" />
-        <TextBox HorizontalAlignment="Left" Margin="300,340,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="photo_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,380,0,0" TextWrapping="Wrap" Text="Plan" VerticalAlignment="Top" Name="plan"/>
-        <TextBox HorizontalAlignment="Left" Margin="300,400,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="plan_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="300,440,0,0" TextWrapping="Wrap" Text="RegID" VerticalAlignment="Top" Name="regid" />
-        <TextBox HorizontalAlignment="Left" Margin="300,460,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regid_box" />
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="190,485,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
-        
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="411" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="Street" VerticalAlignment="Top" Name="street" Target="{Binding ElementName=street_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="street_box" />
+
+            <Label HorizontalAlignment="Left"   Content="House" VerticalAlignment="Top" Name="house" Target="{Binding ElementName=house_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
+            <Label HorizontalAlignment="Left"   Content="Flat" VerticalAlignment="Top" Name="flat" Target="{Binding ElementName=flat_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="flat_box" />
+            <Label HorizontalAlignment="Left"   Content="District" VerticalAlignment="Top" Name="districtid" Target="{Binding ElementName=district_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="districtid_box" />
+
+            <Label HorizontalAlignment="Left"   Content="Floors" VerticalAlignment="Top" Name="floors" Target="{Binding ElementName=floors_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floors_box" />
+            <Label HorizontalAlignment="Left"   Content="Floor" VerticalAlignment="Top" Name="floor" Target="{Binding ElementName=floor_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="floor_box" />
+            <Label HorizontalAlignment="Left"   Content="TypeHouse" VerticalAlignment="Top" Name="typeHouse" Target="{Binding ElementName=typeHouse_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"   TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="120" Name="typeHouse_comboBox"/>
+            <Label HorizontalAlignment="Left"   Content="TypeToilet" VerticalAlignment="Top" Name="typeToilet" Target="{Binding ElementName=typeToilet_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"   TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="120" Name="typeToilet_comboBox" />
+
+
+            <Label HorizontalAlignment="Left"   Content="TypePlan" VerticalAlignment="Top" Name="typePlan" Target="{Binding ElementName=typePlan_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"   TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="120" Name="typePlan_comboBox" />
+            
+
+            <Label HorizontalAlignment="Left"   Content="SqAll" VerticalAlignment="Top" Name="sqAll" Target="{Binding ElementName=sqAll_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sqAll_box" />
+            <Label HorizontalAlignment="Left"   Content="Private" VerticalAlignment="Top" Name="private" Target="{Binding ElementName=private_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"   TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="private_comboBox"/>
+
+            <Label HorizontalAlignment="Left"   Content="Phone" VerticalAlignment="Top" Name="phone" Target="{Binding ElementName=phone_comboBox}"/>
+            <TextBox HorizontalAlignment="Left"   TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="120" Name="phone_comboBox"  />
+           
+            <Label HorizontalAlignment="Left"   Content="Cost" VerticalAlignment="Top" Name="cost" Target="{Binding ElementName=cost_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="cost_box" />
+
+            <Label HorizontalAlignment="Left"   Content="Photo" VerticalAlignment="Top" Name="photo" Target="{Binding ElementName=photo_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="photo_box" />
+            <Label HorizontalAlignment="Left"   Content="Plan" VerticalAlignment="Top" Name="plan" Target="{Binding ElementName=plan_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="plan_box" />
+            <Label HorizontalAlignment="Left"   Content="RegId" VerticalAlignment="Top" Name="regId" Target="{Binding ElementName=regId_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regId_box" />
+            <Label HorizontalAlignment="Left"   Content="AgentId" VerticalAlignment="Top" Name="agentId" Target="{Binding ElementName=agentId_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="agentId_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="168,426,0,0" VerticalAlignment="Top" Name ="Add" Click="Add_Click"/>
+
 
     </Grid>
 </Window>

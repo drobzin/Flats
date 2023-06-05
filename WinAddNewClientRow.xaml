@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flats"
         mc:Ignorable="d"
-        Title="WinNewCity" Height="350" Width="300">
+        Title="WinNewCity" Height="350" Width="600">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="StreetID" VerticalAlignment="Top" Name="streetid"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="sreetid_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,80,0,0" TextWrapping="Wrap" Text="House" VerticalAlignment="Top" Name="house" />
-        <TextBox HorizontalAlignment="Left" Margin="20,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,140,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Name="name"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="name_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,200,0,0" TextWrapping="Wrap" Text="Document" VerticalAlignment="Top" Name="document" />
-        <TextBox HorizontalAlignment="Left" Margin="20,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="document_box" />
-       
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,260,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
-
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="352" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="StreetID" VerticalAlignment="Top" Name="streetId" Target="{Binding ElementName=streetId_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="streetId_box" />
+            <Label HorizontalAlignment="Left"   Content="House" VerticalAlignment="Top" Name="house" Target="{Binding ElementName=house_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
+            <Label HorizontalAlignment="Left"   Content="Name" VerticalAlignment="Top" Name="name" Target="{Binding ElementName=name_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="name_box" />
+            <Label HorizontalAlignment="Left"   Content="Document" VerticalAlignment="Top" Name="document" Target="{Binding ElementName=document_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="document_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,210,0,0" VerticalAlignment="Top" Name ="Add" Click="Add_Click"/>
     </Grid>
 </Window>

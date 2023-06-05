@@ -7,14 +7,13 @@
         mc:Ignorable="d"
         Title="WinAddNewClientphoneRow" Height="270" Width="270">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="RegID" VerticalAlignment="Top" Name="regid"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regid_box" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,80,0,0" TextWrapping="Wrap" Text="Phone" VerticalAlignment="Top" Name="phone" />
-        <TextBox HorizontalAlignment="Left" Margin="20,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="phone_box" />
-       
-       
-
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,140,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="352" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="RegID" VerticalAlignment="Top" Name="regId" Target="{Binding ElementName=regId_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regId_box" />
+            <Label HorizontalAlignment="Left"   Content="Phone" VerticalAlignment="Top" Name="phone" Target="{Binding ElementName=phone_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="phone_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,110,0,0" VerticalAlignment="Top" Name ="Add" Click="Add_Click" />
 
     </Grid>
 </Window>

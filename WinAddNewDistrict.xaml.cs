@@ -21,84 +21,37 @@ namespace Flats
     /// </summary>
     public partial class WinAddNewDistrict : Window
     {
-        private readonly static string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
-        public DataSet ds_edit = new DataSet("Edited Row");
-        static readonly String sql = "select * from district";
-        private readonly MySqlDataAdapter adapter = new MySqlDataAdapter(sql, dataConnect);
-        private readonly int selected_index;
-        int row_id;
-        public WinAddNewDistrict(int datagrid_index)
+        private readonly string insertInstruction = "INSERT INTO district " +
+                                    "(District)" +
+                                    " VALUES (@0)";
+        private readonly string updateInstruction = "UPDATE district SET District = @0 WHERE idDistrict = @1";
+        private readonly ListView listView = new ListView();
+        private readonly bool editing;
+        private readonly int id;
+        private readonly DataRow selectedRow;
+        public WinAddNewDistrict(DataRow _selectedRow, bool _editing)
         {
-            selected_index = datagrid_index;
             InitializeComponent();
-            adapter.Fill(ds_edit);
-            if (selected_index != -1)
+            selectedRow = _selectedRow;
+            editing = _editing;
+            if (editing)
             {
-                FillTextBoxes();
+                id = Convert.ToInt32(selectedRow[0]);
+                ChangeTable.FillTextBoxes(selectedRow, wrapPanel);
             }
         }
+
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-
-            DataRow row;
-            int row_count = ds_edit.Tables[0].Rows.Count;
-            try
+            if (editing)
             {
-                if (selected_index == -1)
-                {
-                    row_id = Convert.ToInt32(ds_edit.Tables[0].Rows[row_count - 1][0]);
-                    row = Create_Row(row_id + 1);
-                    ds_edit.Tables[0].Rows.Add(row);
-                    MySqlCommandBuilder cmd = new MySqlCommandBuilder(adapter);
-                    adapter.InsertCommand = cmd.GetInsertCommand();
-                    adapter.Update(ds_edit.Tables[0]);
-
-                }
-                else
-                {
-                    MySqlCommandBuilder cmd = new MySqlCommandBuilder(adapter);
-                    EditRows(row_id);
-                    adapter.UpdateCommand = cmd.GetUpdateCommand();
-                    adapter.Update(ds_edit.Tables[0]);
-                    ds_edit.AcceptChanges();
-                }
-                this.Close();
+                ChangeTable.Add_Row(updateInstruction, wrapPanel, this, id);
 
             }
-
-            catch (System.ArgumentException)
+            else
             {
-                MessageBox.Show("Неправильный формат данных");
+                ChangeTable.Add_Row(insertInstruction, wrapPanel, this);
             }
-            catch (MySql.Data.MySqlClient.MySqlException)
-            {
-                MessageBox.Show("Неправильный внешний ключ");
-
-            }
-        }
-
-        private DataRow Create_Row(int row_id)
-        {
-            var new_row = ds_edit.Tables[0].NewRow();
-
-            new_row[0] = row_id;
-            new_row[1] = districtname_box.Text;
-            return new_row;
-        }
-        private void FillTextBoxes()
-        {
-            var edited_row = ds_edit.Tables[0].NewRow();
-            for (int i = 0; i < ds_edit.Tables[0].Columns.Count; i++)
-            {
-                edited_row[i] = ds_edit.Tables[0].Rows[selected_index][i];
-            }
-            row_id = Convert.ToInt32(edited_row[0]);
-            districtname_box.Text = edited_row[1].ToString();
-        }
-        private void EditRows(int row_id)
-        {
-            ds_edit.Tables[0].Rows[selected_index][0] = row_id;
-            ds_edit.Tables[0].Rows[selected_index][1] = districtname_box.Text;
         }
     }
 }

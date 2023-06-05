@@ -81,6 +81,7 @@
     <Compile Include="AgentWin.xaml.cs">
       <DependentUpon>AgentWin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChangeTable.cs" />
     <Compile Include="ClientWin.xaml.cs">
       <DependentUpon>ClientWin.xaml</DependentUpon>
     </Compile>
@@ -89,6 +90,9 @@
     </Compile>
     <Compile Include="RegistrationWin.xaml.cs">
       <DependentUpon>RegistrationWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinAddNewAgentRow.xaml.cs">
+      <DependentUpon>WinAddNewAgentRow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinAddNewAppartmentRow.xaml.cs">
       <DependentUpon>WinAddNewAppartmentRow.xaml</DependentUpon>
@@ -101,9 +105,6 @@
     </Compile>
     <Compile Include="WinAddNewDistrict.xaml.cs">
       <DependentUpon>WinAddNewDistrict.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WinAddNewStreet.xaml.cs">
-      <DependentUpon>WinAddNewStreet.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinAddNewTreetyRow.xaml.cs">
       <DependentUpon>WinAddNewTreetyRow.xaml</DependentUpon>
@@ -153,6 +154,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WinAddNewAgentRow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WinAddNewAppartmentRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -166,10 +171,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WinAddNewDistrict.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WinAddNewStreet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

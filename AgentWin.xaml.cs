@@ -27,13 +27,11 @@ namespace Flats
     public partial class AgentWin : Window
     {
         private  string query;
-        private  string idquery;
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
         private int agentId;
         private DataTable dtApt = new DataTable("Appartament");
         private DataTable dtId = new DataTable("ApartmentId");
         private ObservableCollection<string> phones = new ObservableCollection<string>();
-        //private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
         private int selectedIndex;
         private bool isInitialized = false;
         
@@ -44,12 +42,7 @@ namespace Flats
             agentId = _agentId;
             LoadTextBoxes();
             
-           /* query = $"SELECT appartament.idAppartament, appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
-                           $" Photo,client.Name,Cost  FROM appartament, district,client" +
-                           $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId  = {agentId}); ";*/
-           /* idquery = $"SELECT idAppartament FROM appartament, district, client " +
-                                $"WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId = {agentId})";*/
-            
+          
         }
         private void LoadDataGrid(string query)
         {
@@ -78,11 +71,7 @@ namespace Flats
         {
             Application.Current.Shutdown();
         }
-        protected override void OnClosed(EventArgs e)
-        {
-            Owner.Show();
-            base.OnClosed(e);
-        }
+       
 
         private void ChangeCost_Click(object sender, RoutedEventArgs e)
         {
@@ -199,7 +188,7 @@ namespace Flats
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
-            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);//appartmentId[apt.SelectedIndex]
+            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
             cmd.Parameters.AddWithValue("@bonus", bonus);
             cmd.Parameters.AddWithValue("@agentId", agentId);
             connection.Open();
@@ -405,6 +394,11 @@ namespace Flats
         {
             search_box.Clear();
             HideBoxItems();
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            Owner.Show();
+            base.OnClosed(e);
         }
     }
 }

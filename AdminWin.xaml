@@ -8,9 +8,11 @@
            Title="Database connection" Height="450" Width="905">
     <Grid>
 
-        <DataGrid  Name ="Database" ItemsSource="{Binding}"  Margin="0,68,0,0" HorizontalAlignment="Left" Width="683" />
+        <DataGrid ItemsSource="{Binding}"  Margin="0,68,0,0" HorizontalAlignment="Left" Width="683" Name="content">
 
-        <ComboBox x:Name ="Tables" HorizontalAlignment="Left" Margin="24,25,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="Tables_SelectionChanged" />
+        </DataGrid>
+
+        <ComboBox HorizontalAlignment="Left" Margin="24,25,0,0" VerticalAlignment="Top" Width="120" Name="TableNames" SelectionChanged="TableNames_SelectionChanged"/>
         <Button Content="Создать строку" HorizontalAlignment="Left" Margin="267,25,0,0" VerticalAlignment="Top" Click="Create_Row_Click"/>
         <Button Content="Изменить строку" HorizontalAlignment="Left" Margin="367,25,0,0" VerticalAlignment="Top" Click="Edit_Row_Click"/>
         <Button Content="Удалить строку" HorizontalAlignment="Left" Margin="167,25,0,0" VerticalAlignment="Top" Name ="Delete_row" Click="Delete_row_Click"/>
@@ -27,7 +29,6 @@
         <TextBox Margin="730,134,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Name="search_box" HorizontalAlignment="Left" Width="140"/>
         <ListBox d:ItemsSource="{Binding}" Margin="730,164,0,0" Name="names_list" HorizontalAlignment="Left" Width="140" Height="165" VerticalAlignment="Top" SelectionChanged="Names_list_SelectionChanged" />
         <Button Content="Сбросить поиск" Margin="730,345,0,0" VerticalAlignment="Top" Name="reset_search_btn" HorizontalAlignment="Left" Width="140" Click="Reset_search_btn_Click"/>
-
 
     </Grid>
 </Window>

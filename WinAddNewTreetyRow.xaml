@@ -7,23 +7,24 @@
         mc:Ignorable="d"
         Title="WinAddNewTreetyRow" Height="500" Width="300">
     <Grid>
-        <StackPanel Name="sp">
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
-            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="agent_name_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
-            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="date_start_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
-            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="date_stop_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="352" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left"   Content="AgentId" VerticalAlignment="Top" Name="agentName" Target="{Binding ElementName=agentid_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="agentId_box" />
+            <Label HorizontalAlignment="Left"   Content="DateStart" VerticalAlignment="Top" Name="dateStart" Target="{Binding ElementName=dateStart_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="dateStart_box" />
+            <Label HorizontalAlignment="Left"   Content="DateStop" VerticalAlignment="Top" Name="dateStop" Target="{Binding ElementName=dateStop_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="dateStop_box" />
+            <Label HorizontalAlignment="Left"   Content="Prolong" VerticalAlignment="Top" Name="prolong" Target="{Binding ElementName=prolong_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="prolong_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <Label HorizontalAlignment="Left"   Content="Bonus" VerticalAlignment="Top" Name="bonus" Target="{Binding ElementName=bonus_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="bonus_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
+            <Label HorizontalAlignment="Left"   Content="Comment" VerticalAlignment="Top" Name="comment" Target="{Binding ElementName=comment_box}"/>
             <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="comment_box" />
-            <Label HorizontalAlignment="Left"   Content="StreetName" VerticalAlignment="Top"  />
-            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="regid_box" />
-        </StackPanel>
+            <Label HorizontalAlignment="Left"   Content="AppartamentId" VerticalAlignment="Top" Name="aptId" Target="{Binding ElementName=aptId_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="aptId_box" />
 
+
+        </WrapPanel>
         <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,440,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
 
     

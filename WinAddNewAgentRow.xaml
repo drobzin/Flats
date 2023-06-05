@@ -1,0 +1,20 @@
+﻿<Window x:Class="Flats.WinAddNewAgentRow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flats"
+        mc:Ignorable="d"
+        Title="WinAddNewAgentRow" Height="270" Width="270">
+    <Grid>
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="352" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left" Content="Login" VerticalAlignment="Top" Name="login" Target="{Binding ElementName=document_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="login_box" />
+            <Label HorizontalAlignment="Left" Content="Password" VerticalAlignment="Top" Name="password" Target="{Binding ElementName=password_box}" />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="password_box" />
+            <Label  HorizontalAlignment="Left" Content="Name" VerticalAlignment="Top" x:Name="name" Target="{Binding ElementName=name_box}" />
+            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="name_box" />
+        </WrapPanel>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="20,204,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
+    </Grid>
+</Window>
