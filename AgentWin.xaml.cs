@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,14 +26,14 @@ namespace Flats
     /// </summary>
     public partial class AgentWin : Window
     {
-        private readonly string inWorkAptQuery;
-        private readonly string inWorkAptIdQuery;
+        private  string query;
+        private  string idquery;
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
         private int agentId;
         private DataTable dtApt = new DataTable("Appartament");
         private DataTable dtId = new DataTable("ApartmentId");
         private ObservableCollection<string> phones = new ObservableCollection<string>();
-        private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
+        //private ObservableCollection<string> appartmentId = new ObservableCollection<string>();
         private int selectedIndex;
         private bool isInitialized = false;
         
@@ -42,32 +43,25 @@ namespace Flats
             isInitialized = true;
             agentId = _agentId;
             LoadTextBoxes();
-            inWorkAptQuery = $"SELECT appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
+            
+           /* query = $"SELECT appartament.idAppartament, appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
                            $" Photo,client.Name,Cost  FROM appartament, district,client" +
-                           $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId  = {agentId}); ";
-            inWorkAptIdQuery = $"SELECT idAppartament FROM appartament, district, client " +
-                                $"WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId = {agentId})";
-            LoadDataGrid(inWorkAptQuery,inWorkAptIdQuery);
+                           $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId  = {agentId}); ";*/
+           /* idquery = $"SELECT idAppartament FROM appartament, district, client " +
+                                $"WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId = {agentId})";*/
+            
         }
-        private void LoadDataGrid(string query, string idquery)
+        private void LoadDataGrid(string query)
         {
             dtId.Reset();
-            appartmentId.Clear();
-            dtApt.Clear();
-           
-
-            
+            //appartmentId.Clear();
+            dtApt.Clear();                       
             MySqlDataAdapter adapter = new MySqlDataAdapter(query, dataConnect);
-            adapter.Fill(dtApt);
-
-            MySqlDataAdapter idAdapter = new MySqlDataAdapter(idquery, dataConnect);
-            idAdapter.Fill(dtId);
-            for (int i = 0; i < dtId.Rows.Count; i++)
-            {
-                appartmentId.Add(dtId.Rows[i][0].ToString());
-            }
-
+            adapter.Fill(dtApt);                       
             apt.ItemsSource = dtApt.DefaultView;
+            apt.Columns[0].Visibility = Visibility.Collapsed;
+            
+           
         }
         private void LoadTextBoxes()
         {
@@ -117,12 +111,12 @@ namespace Flats
             MySqlCommand cmd = new MySqlCommand(updateInstruction, connection);
             cmd.Parameters.AddWithValue("@agentId", agentId);
             cmd.Parameters.AddWithValue("@cost", cost.Text);
-            cmd.Parameters.AddWithValue("@aptId", appartmentId[selectedIndex]);
+            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
             connection.Open();
             cmd.ExecuteNonQuery();          
             connection.Close();
             SetProlong();
-            LoadDataGrid(inWorkAptQuery, inWorkAptIdQuery);
+            LoadDataGrid(query);
             cost.Visibility = Visibility.Collapsed;
             accept.Visibility = Visibility.Collapsed;
         }
@@ -134,7 +128,7 @@ namespace Flats
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(instruction, connection);
-            cmd.Parameters.AddWithValue("@aptId", appartmentId[apt.SelectedIndex]);
+            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
             connection.Open();
             timeStop = (DateTime)cmd.ExecuteScalar();
             if (timeNow.CompareTo(timeStop) > 0 )
@@ -157,31 +151,46 @@ namespace Flats
         {
             if (isInitialized)
             {
-                string query;
-                string idquery;
+                
+
                 switch (typeFlats.SelectedIndex)
                 {
                     case 0: // Квартиры для оценки
-                        query = $"SELECT appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
+                        query = $"SELECT appartament.idAppartament, appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
                                $" Photo,client.Name,Cost  FROM appartament, district,client" +
                                $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId IS NULL); ";
-                        idquery = $"SELECT idAppartament FROM appartament, district, client " +
-                                    $"WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId IS NULL)";
-                        LoadDataGrid(query, idquery);
+                       
+                        LoadDataGrid(query);
+                        LoadNamesList();
                         startWork.Visibility = Visibility.Visible;
                         changeCost.Visibility = Visibility.Collapsed;
                         break;
                     case 1: // Квартиры в обработке
-                        query = inWorkAptQuery;
-                        idquery = inWorkAptIdQuery;
+                        query = $"SELECT  appartament.idAppartament, appartament.Street, appartament.House, Flat, district.District, Floors, Floor, TypeHouse, TypeToilet, TypePlan, SqAll, Private, Phone, Plan," +
+                           $" Photo,client.Name,Cost  FROM appartament, district,client" +
+                           $" WHERE(Cost is NULL  AND appartament.DistrictId = district.idDistrict AND appartament.RegID = client.RegId AND AgentId  = {agentId}); ";
+                        
 
-                        LoadDataGrid(query, idquery);
+                        LoadDataGrid(query);
+                        LoadNamesList();
                         startWork.Visibility = Visibility.Collapsed;
                         changeCost.Visibility = Visibility.Visible;
                         break;
                 }
             }
         }
+
+        private void LoadNamesList()
+        {
+            names_list.SelectedIndex = -1;
+            names_list.Items.Clear();
+            foreach (DataColumn column in dtApt.Columns)
+            {
+                if (column.ColumnName != "idAppartament")
+                names_list.Items.Add(column.ColumnName);
+            }
+        }
+
         private void AddTreetyRow() 
         {
             string insertInstruction = "INSERT INTO treety SET DateStart = CURDATE(), DateStop =DATE_ADD(CURDATE(), INTERVAL 1 MONTH), Bonus = @bonus, AppartamentId = @aptId, AgentId =@agentId ";
@@ -190,7 +199,7 @@ namespace Flats
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
-            cmd.Parameters.AddWithValue("@aptId", appartmentId[apt.SelectedIndex]);
+            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);//appartmentId[apt.SelectedIndex]
             cmd.Parameters.AddWithValue("@bonus", bonus);
             cmd.Parameters.AddWithValue("@agentId", agentId);
             connection.Open();
@@ -202,6 +211,7 @@ namespace Flats
 
         private void ShowPhone_Click(object sender, RoutedEventArgs e)
         {
+            phones.Clear();
             if (apt.SelectedIndex == -1)
             {
                 MessageBox.Show("Выберите строку");
@@ -214,7 +224,8 @@ namespace Flats
                 MySqlConnection connection = new MySqlConnection();
                 connection.ConnectionString = dataConnect;
                 MySqlCommand cmd = new MySqlCommand(selectRegId, connection);
-                cmd.Parameters.AddWithValue("@aptId", appartmentId[apt.SelectedIndex]);
+                string check = dtApt.Rows[0][apt.SelectedIndex].ToString();
+                cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
                 connection.Open();
                 string regId = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = selectPhones;
@@ -235,6 +246,165 @@ namespace Flats
                 }
                 MessageBox.Show(phonesRow);
             }
+        }
+        private void Search_btn_Click(object sender, RoutedEventArgs e)
+        {
+            string filter_value;
+            string filter_columname;
+            string[] src_column_type = new string[names_list.Items.Count];
+
+            if (search_box.Text == string.Empty)
+            {
+                filter_value = string.Empty;
+                MessageBox.Show("Не введено условие для поиска");
+
+            }
+            else
+            {
+                filter_value = search_box.Text;
+                if (names_list.SelectedItems.Count == 0)
+                {
+                    filter_columname = null;
+                    MessageBox.Show("Не выбран столбец для поиска");
+                }
+                else
+                {
+                    filter_columname = names_list.SelectedItem.ToString();
+                    GetColumnDataType(dtApt, ref src_column_type);
+                    switch (src_column_type[names_list.SelectedIndex])
+                    {
+                        case "System.Date":
+                            DateTime result_date;
+                            bool success_data = DateTime.TryParse(filter_value, out result_date);
+                            if (success_data)
+                            {
+                                Search(filter_columname, filter_value);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Введенное вами значение не является датой");
+                            }
+                            break;
+                        case "System.Int32":
+                            Int16 result_int;
+                            bool success_int = Int16.TryParse(filter_value, out result_int);
+                            if (success_int)
+                            {
+                                Search(filter_columname, filter_value);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Введенное вами значение не является числом!");
+                            }
+                            break;
+                        case "System.String":
+                            Search(filter_columname, filter_value);
+                            break;
+
+                        default:
+                            Search(filter_columname, filter_value);
+                            break;
+
+                    }
+
+                }
+            }
+        }
+
+        private void Reset_search_btn_Click(object sender, RoutedEventArgs e)
+        {
+            dtApt.Clear();
+            LoadDataGrid(query);
+        }
+
+        private void GetColumnDataType(DataTable helpTable, ref string[] columnType)
+        {
+            int j;
+            foreach (DataColumn helpColumn in helpTable.Columns)
+            {
+                j = helpColumn.Ordinal;
+                columnType[j] = helpColumn.DataType.ToString();
+            }
+            
+            
+        }
+
+        private void Search(string filter_columname, string filter_value)
+        {
+            string filter = "";
+            switch (filter_type.SelectedIndex)
+            {
+                case 0:
+                    filter = $"{filter_columname} ='{filter_value}'";
+                    break;
+                case 1:
+                    filter = $"{filter_columname} LIKE '%{filter_value}%'";
+                    break;
+                case 2:
+                    filter = $"{filter_columname} LIKE '{filter_value}%'";
+                    break;
+                case 3:
+                    filter = $"{filter_columname} > '{filter_value}'";
+                    break;
+                case 4:
+                    filter = $"{filter_columname} >= '{filter_value}'";
+                    break;
+                case 5:
+                    filter = $"{filter_columname} <'{filter_value}'";
+                    break;
+                case 6:
+                    filter = $"{filter_columname} <='{filter_value}'";
+                    break;
+            }
+            DataRow[] help_DataRows = dtApt.Copy().Select(filter);
+            dtApt.Clear();
+            for (int i = 0; i < help_DataRows.Length; i++)
+            {
+                dtApt.ImportRow(help_DataRows[i]);
+
+            }
+            
+        }
+        private void HideBoxItems()
+        {
+            if (names_list.SelectedIndex != -1)
+            {
+                string[] src_column_type = new string[names_list.Items.Count];
+                GetColumnDataType(dtApt, ref src_column_type);
+                switch (src_column_type[names_list.SelectedIndex])
+                {
+                    case "System.Date":
+                        on_entry.Visibility = Visibility.Visible;
+                        starts_with.Visibility = Visibility.Visible;
+                        higher.Visibility = Visibility.Collapsed;
+                        higher_equals.Visibility = Visibility.Collapsed;
+                        lower.Visibility = Visibility.Collapsed;
+                        lower_equals.Visibility = Visibility.Collapsed;
+                        break;
+                    case "System.String":
+                        on_entry.Visibility = Visibility.Visible;
+                        starts_with.Visibility = Visibility.Visible;
+                        higher.Visibility = Visibility.Collapsed;
+                        higher_equals.Visibility = Visibility.Collapsed;
+                        lower.Visibility = Visibility.Collapsed;
+                        lower_equals.Visibility = Visibility.Collapsed;
+                        break;
+                    case "System.Int32":
+                        on_entry.Visibility = Visibility.Collapsed;
+                        starts_with.Visibility = Visibility.Collapsed;
+                        higher.Visibility = Visibility.Visible;
+                        higher_equals.Visibility = Visibility.Visible;
+                        lower.Visibility = Visibility.Visible;
+                        lower_equals.Visibility = Visibility.Visible;
+                        break;
+                }
+            }
+        }
+
+        private void Names_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            search_box.Clear();
+            HideBoxItems();
         }
     }
 }
