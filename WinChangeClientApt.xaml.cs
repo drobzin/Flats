@@ -41,6 +41,7 @@ namespace Flats
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
+           
             string insertInstruction = "INSERT INTO appartament SET Street = @0,House = @1,Flat = @2," +
                                         "DistrictId = (SELECT idDistrict from district where District = @districtName),Floors = @3,Floor = @4,TypeHouse = @typeHouse," +
                                         "TypeToilet = @typeToilet,TypePlan = @typePlan,SqAll = @5,Private = @isPrivate,Phone = @isPhone, " +

@@ -110,7 +110,7 @@ namespace Flats
             if (changeAdress.newAdress != "")
             {
                 adressText = changeAdress.newAdress;
-                adress.Text = $"Адрес проживания: {adressText}";
+                adress.Text = $"Адрес: {adressText}";
             }
         }
 

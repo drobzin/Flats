@@ -33,23 +33,25 @@ namespace Flats
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            string deleteInstruction = "DELETE FROM clientphone WHERE (Phone = @phone AND RegId = @regId)";
-            MySqlConnection connection = new MySqlConnection();
-            connection.ConnectionString = dataConnect;
-            MySqlCommand cmd = new MySqlCommand(deleteInstruction, connection);
-            cmd.Parameters.AddWithValue("@regId", regId);
-            cmd.Parameters.AddWithValue("@phone", phonesList.SelectedItem.ToString());
-            try
+            if (phonesList.SelectedIndex != -1)
             {
+                string deleteInstruction = "DELETE FROM clientphone WHERE (Phone = @phone AND RegId = @regId)";
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = dataConnect;
+
+                MySqlCommand cmd = new MySqlCommand(deleteInstruction, connection);
+                cmd.Parameters.AddWithValue("@regId", regId);
+                cmd.Parameters.AddWithValue("@phone", phonesList.SelectedItem.ToString());
+
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 phoneNumbers.Remove(phonesList.SelectedItem.ToString());
+
             }
-            catch (Exception)
-            {
-                System.Windows.MessageBox.Show("Выберите номер для удаления");
-            }
+            else 
+            System.Windows.MessageBox.Show("Выберите номер для удаления");
+            
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -75,6 +77,7 @@ namespace Flats
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 phoneNumbers.Add(phone_box.Text);
+                phone_box.Clear();
             }
             catch (Exception)
             {

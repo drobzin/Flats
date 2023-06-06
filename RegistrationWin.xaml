@@ -3,10 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Flats"
-        mc:Ignorable="d"
-        Title="RegistrationWin" Height="450" Width="800">
-    <Grid>
         
+        mc:Ignorable="d"
+        Title="RegistrationWin" Height="500" Width="500">
+    <Grid>
+
+        <WrapPanel Name="wrapPanel" ItemWidth="250"  Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"  Height="332" Margin="10,10,0,0">
+            <Label HorizontalAlignment="Left" Content="Логин" VerticalAlignment="Top" Name="login" Target="{Binding ElementName=document_box}"/>
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="login_box" />
+            <Label HorizontalAlignment="Left" Content="Пароль" VerticalAlignment="Top" Name="password" Target="{Binding ElementName=password_box}" />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="password_box" />
+            <Label HorizontalAlignment="Left" Content="Повторите пароль" VerticalAlignment="Top" Name="passwordCheck" Target="{Binding ElementName=passwordCheck_box}" />
+            <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="passwordCheck_box" />
+            <Label  HorizontalAlignment="Left" Content="ФИО" VerticalAlignment="Top" x:Name="name" Target="{Binding ElementName=name_box}" />
+            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="name_box" />
+
+
+            <Label  HorizontalAlignment="Left" Content="Улица" VerticalAlignment="Top" x:Name="street" Target="{Binding ElementName=street_box}" />
+            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="street_box" />
+            <Label  HorizontalAlignment="Left" Content="Дом" VerticalAlignment="Top" x:Name="house" Target="{Binding ElementName=house_box}" />
+            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="house_box" />
+            <Label  HorizontalAlignment="Left" Content="Документ на право собственности" VerticalAlignment="Top" x:Name="document" Target="{Binding ElementName=document_box}" />
+            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="200" Name="document_box" />
+        </WrapPanel>
+        <Label  HorizontalAlignment="Left" Content="Номер телефона" VerticalAlignment="Top" x:Name="phone" Target="{Binding ElementName=phone_box}" Margin="10,342,0,0" />
+        <xctk:MaskedTextBox Margin="10,373,0,0"  ClipboardMaskFormat="IncludePromptAndLiterals" Mask="0-000-000-00-00"  Name="phone_box" HorizontalAlignment="Left" Width="120" Height="20" VerticalAlignment="Top"/>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="10,409,0,0" VerticalAlignment="Top" Name="NewCity" Click="Add_Click" />
     </Grid>
 </Window>

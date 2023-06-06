@@ -43,7 +43,7 @@ namespace Flats
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             string updateInstruction =  $"UPDATE client SET Street = @streetName , client.House = @house" +
-                                        $" WHERE (Street = '{splitedAdress[0]}' AND client.RegId = '{regId}')";
+                                        $" WHERE ( client.RegId = '{regId}')";
             MySqlConnection connection = new MySqlConnection();
             connection.ConnectionString = dataConnect;
             MySqlCommand cmd = new MySqlCommand(updateInstruction, connection);

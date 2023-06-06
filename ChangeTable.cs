@@ -42,7 +42,7 @@ namespace Flats
                 connection.Close();
                 win.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException)
+            catch (MySql.Data.MySqlClient.MySqlException )
             {
                 MessageBox.Show("Неправильный формат данных");
             }

@@ -40,7 +40,18 @@ namespace Flats
                         clientWin.Show();
                         this.Hide();
                     }
-                    else MessageBox.Show("Такого пользователя не существует"); // Тут по хорошему предложение зарегестрироваться
+                    else
+                    {
+                        if (MessageBox.Show("Такого пользователя не существует, перейти к регистрации?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            RegistrationWin registrationWin = new RegistrationWin();
+                            registrationWin.Owner = this;
+                            Hide();
+                            registrationWin.Show();
+                        }
+                       
+                        
+                    }
                     break;
                 case 1: // Агент
                     string agentSelection = "SELECT idagent FROM agent WHERE ( login = @login AND password = @password)";

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flats"
         mc:Ignorable="d"
-        Title="Database connection" Height="450" Width="905">
+        Title="Database connection" Height="245" Width="276">
     <Grid>
-        <Button Content="Войти" HorizontalAlignment="Left" Margin="257,128,0,0" VerticalAlignment="Top" Name="LogIn" Click="LogIn_Click"/>
-        <Button Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="218,202,0,0" VerticalAlignment="Top" Name="Registration" Click="Registration_Click"/>
+        <Button Content="Войти" HorizontalAlignment="Center" Margin="0,68,0,0" VerticalAlignment="Top" Name="LogIn" Click="LogIn_Click"/>
+        <Button Content="Зарегистрироваться" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Name="Registration" Click="Registration_Click"/>
 
 
 

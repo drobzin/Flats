@@ -25,9 +25,9 @@
             <ComboBoxItem Content="Квартиры в обработке"/>
             <ComboBoxItem Content="Не оцененные квартиры" IsSelected="True"/>
         </ComboBox>
-        <Button Content="Доабваить" HorizontalAlignment="Left" Margin="590,143,0,0" VerticalAlignment="Top" Visibility="Collapsed" Name="addApt" Click="AddApt_Click"/>
-        <Button Content="Изменить" HorizontalAlignment="Left" Margin="690,143,0,0" VerticalAlignment="Top" Visibility="Collapsed" Name="chacngeApt" Click="ChangeApt_Click"/>
-        <Button Content="Удалить" HorizontalAlignment="Left" Margin="771,143,0,0" VerticalAlignment="Top" Visibility="Collapsed" Name="delete" Click="Delete_Click"/>
+        <Button Content="Доабваить" HorizontalAlignment="Left" Margin="590,143,0,0" VerticalAlignment="Top" Name="addApt" Click="AddApt_Click"/>
+        <Button Content="Изменить" HorizontalAlignment="Left" Margin="690,143,0,0" VerticalAlignment="Top" Name="chacngeApt" Click="ChangeApt_Click"/>
+        <Button Content="Удалить" HorizontalAlignment="Left" Margin="771,143,0,0" VerticalAlignment="Top" Name="delete" Click="Delete_Click"/>
 
 
 

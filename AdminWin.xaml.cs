@@ -16,6 +16,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
+using System.Windows.Media.TextFormatting;
 
 namespace Flats
 {
@@ -39,7 +40,6 @@ namespace Flats
 
             InitializeComponent();
             LoadNames();
-
         }
         private void LoadNames()
         {

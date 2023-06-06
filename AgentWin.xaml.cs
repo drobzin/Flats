@@ -1,10 +1,12 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.Office.Interop.Word;
+using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,6 +20,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Xceed.Wpf.AvalonDock.Themes;
+using DataTable = System.Data.DataTable;
+using Window = System.Windows.Window;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace Flats
 {
@@ -29,12 +34,15 @@ namespace Flats
         private  string query;
         private readonly string dataConnect = "server = localhost; user = root; database = center; password = 3245107869m";
         private int agentId;
-        private DataTable dtApt = new DataTable("Appartament");
-        private DataTable dtId = new DataTable("ApartmentId");
+        private System.Data.DataTable dtApt = new DataTable("Appartament");
+        private System.Data.DataTable dtId = new DataTable("ApartmentId");
         private ObservableCollection<string> phones = new ObservableCollection<string>();
         private int selectedIndex;
         private bool isInitialized = false;
-        
+        private FileInfo _fileInfo;
+        private Word.Application app = null;
+        private string treetyId;
+
         public AgentWin( int _agentId)
         {
             InitializeComponent();
@@ -69,7 +77,7 @@ namespace Flats
         }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
        
 
@@ -102,12 +110,72 @@ namespace Flats
             cmd.Parameters.AddWithValue("@cost", cost.Text);
             cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
             connection.Open();
-            cmd.ExecuteNonQuery();          
+            cmd.ExecuteNonQuery();
             connection.Close();
             SetProlong();
             LoadDataGrid(query);
             cost.Visibility = Visibility.Collapsed;
             accept.Visibility = Visibility.Collapsed;
+        }
+        private void CreateReport()
+        {
+            string getTreety = "SELECT idTreety, DateStart, DateStop, Bonus, client.Name, appartament.Street, appartament.House " +
+                                "FROM treety,appartament,client " +
+                               $"WHERE (treety.AppartamentId ='{dtApt.Rows[apt.SelectedIndex][0]}'AND appartament.idAppartament = '{dtApt.Rows[apt.SelectedIndex][0]}'AND appartament.RegID = client.RegId)";
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter(getTreety, dataConnect);
+            System.Data.DataTable treety = new System.Data.DataTable("Treety");
+            adapter.Fill(treety);
+            treetyId = treety.Rows[0][0].ToString();
+            string fileName = "ReportSample.docx";
+            if (File.Exists(fileName))
+            {
+                _fileInfo = new FileInfo(fileName);
+            }
+            var words = new Dictionary<string, string>
+            {
+                {"<idTreety>", treetyId },               
+                {"<DateStart>", Convert.ToDateTime( treety.Rows[0][1]).ToString("dd.MM.yyyy") },
+                {"<DateStop>", Convert.ToDateTime( treety.Rows[0][2]).ToString("dd.MM.yyyy") },
+                {"<Bonus>", treety.Rows[0][3].ToString() },
+                {"<Name>", treety.Rows[0][4].ToString() },
+                {"<Street>", treety.Rows[0][5].ToString() },
+                {"<House>", treety.Rows[0][6].ToString() }
+            };
+            Process(words);
+        }
+        private void Process (Dictionary<string, string> words)
+        {
+            app = new Word.Application();
+            Object file = _fileInfo.FullName;
+            Object missing = Type.Missing;
+            app.Documents.Open(file);
+
+            foreach (var word in words)
+            {
+                Word.Find find = app.Selection.Find;
+                find.Text = word.Key;
+                find.Replacement.Text = word.Value;
+
+                Object wrap = Word.WdFindWrap.wdFindContinue;
+                Object replace = Word.WdReplace.wdReplaceAll;
+
+                find.Execute(FindText: Type.Missing,
+                           MatchCase: false,
+                           MatchWholeWord: false,
+                           MatchWildcards: false,
+                           MatchSoundsLike: missing,
+                           MatchAllWordForms: false,
+                           Forward: true,
+                           Wrap: wrap,
+                           Format: false,
+                           ReplaceWith: missing, Replace: replace);
+
+            }
+            Object newFileName = System.IO.Path.Combine(_fileInfo.DirectoryName, treetyId + "Report");
+            app.ActiveDocument.SaveAs2(newFileName);
+            app.Visible = true;
+
         }
         private void SetProlong()
         {
@@ -133,6 +201,8 @@ namespace Flats
         private void StartWork_Click(object sender, RoutedEventArgs e)
         {
             AddTreetyRow();
+            CreateReport();
+
             typeFlats.SelectedIndex = 1;
         }
 
@@ -182,24 +252,32 @@ namespace Flats
 
         private void AddTreetyRow() 
         {
-            string insertInstruction = "INSERT INTO treety SET DateStart = CURDATE(), DateStop =DATE_ADD(CURDATE(), INTERVAL 1 MONTH), Bonus = @bonus, AppartamentId = @aptId, AgentId =@agentId ";
-            string updateInstruction = "UPDATE appartament SET AgentId = @agentId WHERE idAppartament = @aptId";
-            int bonus = (int)dtApt.Rows[apt.SelectedIndex][dtApt.Columns.IndexOf("SqAll")] * 100;
-            MySqlConnection connection = new MySqlConnection();
-            connection.ConnectionString = dataConnect;
-            MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
-            cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
-            cmd.Parameters.AddWithValue("@bonus", bonus);
-            cmd.Parameters.AddWithValue("@agentId", agentId);
-            connection.Open();
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = updateInstruction;
-            cmd.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                string insertInstruction = "INSERT INTO treety SET DateStart = CURDATE(), DateStop =DATE_ADD(CURDATE(), INTERVAL 1 MONTH), Bonus = @bonus, AppartamentId = @aptId, AgentId =@agentId ";
+                string updateInstruction = "UPDATE appartament SET AgentId = @agentId WHERE idAppartament = @aptId";
+                int bonus = (int)dtApt.Rows[apt.SelectedIndex][dtApt.Columns.IndexOf("SqAll")] * 100;
+                MySqlConnection connection = new MySqlConnection();
+                connection.ConnectionString = dataConnect;
+                MySqlCommand cmd = new MySqlCommand(insertInstruction, connection);
+                cmd.Parameters.AddWithValue("@aptId", dtApt.Rows[apt.SelectedIndex][0]);
+                cmd.Parameters.AddWithValue("@bonus", bonus);
+                cmd.Parameters.AddWithValue("@agentId", agentId);
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = updateInstruction;
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+                MessageBox.Show("Выберите строку");
+            }
         }
 
         private void ShowPhone_Click(object sender, RoutedEventArgs e)
         {
+
             phones.Clear();
             if (apt.SelectedIndex == -1)
             {
@@ -311,8 +389,11 @@ namespace Flats
             int j;
             foreach (DataColumn helpColumn in helpTable.Columns)
             {
-                j = helpColumn.Ordinal;
-                columnType[j] = helpColumn.DataType.ToString();
+                if (helpColumn.ColumnName != "idAppartament")
+                {
+                    j = helpColumn.Ordinal -1;
+                    columnType[j] = helpColumn.DataType.ToString();
+                }
             }
             
             

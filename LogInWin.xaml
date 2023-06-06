@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flats"
         mc:Ignorable="d"
-        Title="LogInWIn" Height="450" Width="800">
+        Title="LogInWIn" Height="288" Width="198">
     <Grid>
-        <ComboBox HorizontalAlignment="Left" Margin="103,55,0,0" VerticalAlignment="Top" Width="120" Name="user">
+        <ComboBox HorizontalAlignment="Left" Margin="27,35,0,0" VerticalAlignment="Top" Width="120" Name="user">
             <ComboBoxItem Content="Клиент"/>
             <ComboBoxItem Content="Агент"/>
             <ComboBoxItem Content="Админ"/>
         </ComboBox>
-        <TextBox HorizontalAlignment="Left" Margin="140,217,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="login_box"/>
-        <Label Content="Логин" HorizontalAlignment="Left" Margin="180,175,0,0" VerticalAlignment="Top" Target="{Binding ElementName=login_box}"/>
-        <Label Content="Пароль" HorizontalAlignment="Left" Margin="239,276,0,0" VerticalAlignment="Top" Target="{Binding ElementName=password_box}"/>
-        <PasswordBox HorizontalAlignment="Left" Margin="205,307,0,0" VerticalAlignment="Top" Width="120" Name="password_box"/>
-        <Button Content="Войти" HorizontalAlignment="Left" Margin="239,360,0,0" VerticalAlignment="Top" Name="LogIn" Click="LogIn_Click"/>
+        <TextBox HorizontalAlignment="Left" Margin="27,104,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Name="login_box"/>
+        <Label Content="Логин" HorizontalAlignment="Left" Margin="27,73,0,0" VerticalAlignment="Top" Target="{Binding ElementName=login_box}"/>
+        <Label Content="Пароль" HorizontalAlignment="Left" Margin="27,140,0,0" VerticalAlignment="Top" Target="{Binding ElementName=password_box}"/>
+        <PasswordBox HorizontalAlignment="Left" Margin="27,171,0,0" VerticalAlignment="Top" Width="120" Name="password_box"/>
+        <Button Content="Войти" HorizontalAlignment="Left" Margin="69,217,0,0" VerticalAlignment="Top" Name="LogIn" Click="LogIn_Click"/>
 
     </Grid>
 </Window>
